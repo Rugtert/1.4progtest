@@ -25,8 +25,9 @@
                 $lang = 4.3785e-5;
                 echo $kort . " " . $lang . "<br>";
                 echo number_format ( $lang, 100) . "<br>";
-                $prijs = 4.3785E3;
-                echo "De prijs is &euro; " . number_format ($pijs, 2, ",", ".")
+                $prijs = 4.3785354235E3;
+                echo "De prijs is &euro; " . number_format ($prijs, 2, ",", ".") . "<BR>";
+                echo round ($prijs,90)
             ?>
         </strong>
     <body>
