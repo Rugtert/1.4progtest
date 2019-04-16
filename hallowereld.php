@@ -5,6 +5,7 @@
                 $hw = "hallo wereld!";
                 echo $hw . "<BR>";
                 echo strtoupper ($hw);
+                echo "$g"
                 #$sZin = "Dit is een zin. dit is een tweede zin. Dit is een derde.";
                 #echo strpos ($sZin, "dit") . "<br>";
                 #echo strrpos ($sZin, "dit") . "<br>";
