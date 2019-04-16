@@ -2,6 +2,9 @@
     <body>
         <strong>
             <?php
+                $hw = "hallo wereld!";
+                echo $hw . "<BR>";
+                echo strtoupper ($hw);
                 #$sZin = "Dit is een zin. dit is een tweede zin. Dit is een derde.";
                 #echo strpos ($sZin, "dit") . "<br>";
                 #echo strrpos ($sZin, "dit") . "<br>";
@@ -21,13 +24,13 @@
                 #$getal = 28/3;
                 #echo floatval ($getal) ;
                 #echo $getal;
-                $kort = 4.3785e-2;
-                $lang = 4.3785e-5;
-                echo $kort . " " . $lang . "<br>";
-                echo number_format ( $lang, 100) . "<br>";
-                $prijs = 4.3785354235E3;
-                echo "De prijs is &euro; " . number_format ($prijs, 2, ",", ".") . "<BR>";
-                echo round ($prijs,90)
+                ##$kort = 4.3785e-2;
+                #$lang = 4.3785e-5;
+                #echo $kort . " " . $lang . "<br>";
+                #echo number_format ( $lang, 100) . "<br>";
+                #$prijs = 4.3785354235E3;
+                #echo "De prijs is &euro; " . number_format ($prijs, 2, ",", ".") . "<BR>";
+                #echo round ($prijs,90)
             ?>
         </strong>
     <body>
