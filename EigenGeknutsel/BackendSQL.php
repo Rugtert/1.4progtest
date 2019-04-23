@@ -1,14 +1,19 @@
 <?php
+define ('servername', "localhost");
+define ('username', "root");
+define ('password', "");
+define ('dbname', "debieb");
+
 //function liddetails
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "debieb";
+#$servername = "localhost";
+#$username = "root";
+#$password = "";
+#$dbname = "debieb";
 $Voornaam = $_POST['Voornaam'];
 $Titel = $_POST['Titel'];
 
 // Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect(servername, username, password, dbname);
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
