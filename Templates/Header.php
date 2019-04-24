@@ -18,7 +18,7 @@
 		font-family: 'Varela Round', sans-serif;
 		font-size: 13px;
 	}
-	.table-wrapper {
+	.table-responsive {
         background: #fff;
         padding: 20px 25px;
         margin: 30px 0;
@@ -64,7 +64,7 @@
     table.table tr th, table.table tr td {
         border-color: #e9e9e9;
 		padding: 12px 15px;
-		vertical-align: middle;
+		vertical-align: Middle;
     }
 	table.table tr th:first-child {
 		width: 60px;

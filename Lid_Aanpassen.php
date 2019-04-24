@@ -3,14 +3,46 @@
     require "./config/configsql.php";
 
     if (isset($_GET['lid_nr'])) {
-        echo $_GET['lid_nr']; //test doeleinde...
+        $conn = mysqli_connect($host, $username, $password, $dbname);
+	    // Check connection
+	    if (!$conn) {
+	    	die("Connection failed: " . mysqli_connect_error());
+        };
+        
+        $sql = "SELECT * FROM lid WHERE lid_nr = $_GET[lid_nr]";
+        $result = mysqli_query($conn, $sql);
+        
+	    if (mysqli_num_rows($result) < 1) {
+	       	die("no results");
+        };
+        $user = mysqli_fetch_assoc($result);
     }
     else {
         Echo "Something went wrong";
         exit;
     };
-
 ?>
+<div class="container-fluid">
+    <div class="table-responsive">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2><b>Aanpassen lid <?php//$row = mysqli_fetch_assoc($result); echo $row["voornaam"];?></b></h2>
+				</div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <?php foreach ($user as $key => $value) : ?>
+                    <?php echo "<th>$key </th>" ; ?>
+                    <?php endforeach;?>
+
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+			?>
 <?php /*<div class="container">
         <div class="table-wrapper">
             <div class="table-title">
@@ -100,4 +132,4 @@ Require "./config/configsql.php";
 
     mysqli_close($conn);
 ?>
-<?php include "./templates/footer.php"; ?>*/
+<?php include "./templates/footer.php"; ?>*/?>
