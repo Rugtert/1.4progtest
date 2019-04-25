@@ -1,7 +1,32 @@
 <?php include "./templates/header.php"; ?>
 <?php 
     require "./config/configsql.php";
-
+    if (isset($_POST['submit'])){
+        $Voornaam = $_POST["Voornaam"];
+        $Voorvoegsel = $_POST["Voorvoegsel"];
+        $Achternaam = $_POST["Achternaam"];
+        $Straatnaam = $_POST["Straatnaam"];
+        $Huisnummer = $_POST["Huisnummer"];
+        $Woonplaats = $_POST["Woonplaats"];
+        $Postcode = $_POST["Postcode"];
+        $Telefoonnummer = $_POST["Telefoonnummer"];
+        $Emailadres = $_POST["Emailadres"];
+        $Geboortedatum = $_POST["Geboortedatum"];
+        $Lid_nr = $_POST["Lid_nr"];
+        $conn = mysqli_connect($host, $username, $password, $dbname);
+	    // Check connection
+	    if (!$conn) {
+	    	die("Connection failed: " . mysqli_connect_error());
+        };
+        $sql = "UPDATE lid SET Voornaam = \"$Voornaam\", Voorvoegsel = \"$Voorvoegsel\", Achternaam = \"$Achternaam\", Straatnaam = \"$Straatnaam\", Huisnummer = \"$Huisnummer\", Woonplaats = \"$Woonplaats\", Postcode = \"$Postcode\", Telefoonnummer = \"$Telefoonnummer\", Emailadres = \"$Emailadres\", Geboortedatum = \"$Geboortedatum\" WHERE Lid_nr = \"$Lid_nr\"";
+        $result = mysqli_query($conn, $sql);
+        
+        if (mysqli_error($conn)) {
+            echo "Er is iets fout gegaan bij het aanpassen van het lid. Zie onderstaande foutmelding.<br>";
+            Echo mysqli_error($conn);
+            die;
+        }
+    }
     if (isset($_GET['lid_nr'])) {
         $conn = mysqli_connect($host, $username, $password, $dbname);
 	    // Check connection
@@ -22,7 +47,26 @@
         exit;
     };
 ?>
-<div class="container-fluid">
+<form method = "post">
+<div class="container-fluid"
+  <div class="form-group">
+    <?php foreach ($user as $key => $value) : ?>
+    <label for="<?php echo $key;?>"><?php echo $key;?></label>
+    <?php
+    if ($key == 'Lid_nr'){
+        echo "<input type=\"text\" class=\"form-control\" id=\"$key\" name=\"$key\" value=\"$value\" readonly>";
+    } 
+    Else {
+        echo "<input type=\"text\" class=\"form-control\" id=\"$key\" name=\"$key\" value=\"$value\">";
+    }
+    ?>
+    <br>
+    <?php endforeach;?>
+    <input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lidgegevens aanpassen">
+  </div>
+</div>
+</form>
+<?php /*<div class="container-fluid">
     <div class="table-responsive">
         <div class="table-title">
             <div class="row">
@@ -35,14 +79,29 @@
             <thead>
                 <tr>
                     <?php foreach ($user as $key => $value) : ?>
-                    <?php echo "<th>$key </th>" ; ?>
+                    <?php echo "<th>$key</th>" ; ?>
                     <?php endforeach;?>
-
                 </tr>
             </thead>
             <tbody>
-            <?php
-			?>
+                <form method = "post">
+                <?php foreach ($user as $key => $value) : ?>
+                <?php 
+                if($key == 'Lid_nr') {
+                    echo "<td><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></td>";
+                }
+                else {
+                    echo "<td><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\"></td>";
+                }
+                ?>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lidgegevens aanpassen">
+*/?>
 <?php /*<div class="container">
         <div class="table-wrapper">
             <div class="table-title">
