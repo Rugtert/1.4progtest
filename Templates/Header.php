@@ -221,8 +221,6 @@
 		border-radius: 2px;
 		box-shadow: none;
 		border-color: #dddddd;
-		left: 6px;
-		top: 3px;
 	}
 	.modal textarea.form-control {
 		resize: vertical;
