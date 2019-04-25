@@ -63,7 +63,13 @@
     ?>
     <br>
     <?php endforeach;?>
-    <input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lidgegevens aanpassen">
+    <div class="row">
+        <div class="col">
+            <input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lidgegevens aanpassen">
+            <a href="./Leden.php" class="btn btn-primary mb-2">Annuleren</a>
+        </div>
+    </div>
+
   </div>
 </div>
 </form>
