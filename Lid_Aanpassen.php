@@ -26,6 +26,7 @@
             Echo mysqli_error($conn);
             die;
         }
+    echo "Lid aangepast!";
     }
     if (isset($_GET['lid_nr'])) {
         $conn = mysqli_connect($host, $username, $password, $dbname);
