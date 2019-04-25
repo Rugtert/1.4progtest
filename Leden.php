@@ -42,6 +42,7 @@
 				<td><?php echo $row["voornaam"];?></td>
 				<td><?php echo $row["achternaam"];?></td> 
 				<td><a href="Lid_aanpassen.php?lid_nr=<?php echo $row["lid_nr"];?>">Aanpassen</a></td>
+				<td><a href="Lid_aanpassen.php?lid_nr=<?php echo $row["lid_nr"];?>">Verwijderen</a></td>
 			</tr>
 			<?php endforeach ?>
             </tbody>
