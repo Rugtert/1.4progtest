@@ -14,7 +14,6 @@
         $Telefoonnummer = $_POST["Telefoonnummer"];
         $Emailadres = $_POST["Emailadres"];
         $Geboortedatum = $_POST["Geboortedatum"];
-        $Lid_nr = $_POST["Lid_nr"];
 
         //Verbinden met mysql
         $conn = mysqli_connect($host, $username, $password, $dbname);
@@ -25,17 +24,18 @@
         };
 
         //SQL query maken
-        $sql = "UPDATE lid SET Voornaam = \"$Voornaam\", Voorvoegsel = \"$Voorvoegsel\", Achternaam = \"$Achternaam\", Straatnaam = \"$Straatnaam\", Huisnummer = \"$Huisnummer\", Woonplaats = \"$Woonplaats\", Postcode = \"$Postcode\", Telefoonnummer = \"$Telefoonnummer\", Emailadres = \"$Emailadres\", Geboortedatum = \"$Geboortedatum\" WHERE Lid_nr = \"$Lid_nr\"";
+        $sql = "INSERT INTO lid (Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum) 
+        VALUES (\"$Voornaam\", \"$Voorvoegsel\", \"$Achternaam\", \"$Straatnaam\", \"$Huisnummer\", \"$Woonplaats\", \"$Postcode\", \"$Telefoonnummer\", \"$Emailadres\", \"$Geboortedatum\")";
         //SQL query uitvoeren
         mysqli_query($conn, $sql);
         
         //Als de SQL query een foutmelding registreert 
         if (mysqli_error($conn)) {
-            echo "Er is iets fout gegaan bij het aanpassen van het lid. Zie onderstaande foutmelding.<br>";
-            Echo mysqli_error($conn);
+            echo "<p class=\"text-center\">Er is iets fout gegaan bij het aanmaken van het lid. Zie onderstaande foutmelding.<br>" . mysqli_error($conn) . "</p>";
+            //Echo mysqli_error($conn);
             die;
         }
-    die("Lid aangepast! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a>");
+    die("<p class=\"text-center\">Lid toegevoegd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
 	}
 	
 	//SQL verbinding maken
@@ -71,7 +71,7 @@
     <?php endforeach;?>
     <div class="row">
         <div class="col">
-            <input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lidgegevens aanpassen">
+            <input type="submit" class="btn btn-primary mb-2" Name="submit" Value="Lid aanmaken">
             <a href="./Leden.php" class="btn btn-primary mb-2">Annuleren</a>
         </div>
     </div>

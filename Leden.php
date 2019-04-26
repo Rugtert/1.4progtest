@@ -55,7 +55,7 @@
 				<td></td>
 				<td></td>
 				<td><a href="Lid_aanpassen.php?Lid_nr=<?php echo $row["Lid_nr"];?>">Aanpassen</a></td>
-				<td><a href="Lid_aanpassen.php?Lid_nr=<?php echo $row["Lid_nr"];?>">Verwijderen</a></td>
+				<td><a href="Lid_Verwijderen.php?Lid_nr=<?php echo $row["Lid_nr"];?>">Verwijderen</a></td>
 			</tr>
 			<?php endforeach ?>
             </tbody>

@@ -35,7 +35,7 @@
             Echo mysqli_error($conn);
             die;
         }
-    die("Lid aangepast! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a>");
+    die("<p class=\"text-center\">Lid aangepast! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
     }
     if (isset($_GET['Lid_nr'])) {
         $conn = mysqli_connect($host, $username, $password, $dbname);
