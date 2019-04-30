@@ -51,6 +51,7 @@
 	       	die("no results");
         };
         $user = mysqli_fetch_assoc($result);
+        //var_dump($user); //De-commenteer omm te kijken wat er in de array $user zit
     }
     else {
         Echo "Something went wrong";
@@ -60,7 +61,9 @@
 <form method = "post">
 <div class="container-fluid"
   <div class="form-group">
-    <?php foreach ($user as $key => $value) : ?>
+    <?php 
+        foreach ($user as $key => $value) : 
+    ?> 
     <label for="<?php echo $key;?>"><?php echo $key;?></label>
     <?php
     if ($key == 'Lid_nr'){
