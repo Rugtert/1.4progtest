@@ -1,9 +1,10 @@
 <?php include "./templates/header.php"; ?>
+
 <?php 
     require "./config/configsql.php"; //Bevat variabelen om met SQL te kunnen verbinden.
     if (isset($_POST['submit'])){ //Als $_POST['submit'] ingesteld is, voer onderstaande code uit.
         
-        //$_POST variabelen omzetten naar normale variabelen zodat deze gebruikt kunnen worden in de SQL statement
+        //$_POST variabelen omzetten naar normale variabelen zodat deze makkelijker gebruikt kunnen worden in de SQL statement
         $Voornaam = $_POST["Voornaam"];
         $Voorvoegsel = $_POST["Voorvoegsel"];
         $Achternaam = $_POST["Achternaam"];
@@ -18,12 +19,12 @@
         //Verbinden met mysql
         $conn = mysqli_connect($host, $username, $password, $dbname);
         
-        //Als de variabele $conn leeg is wordt het uitvoeren gestopt en de foutmelding naar de browser gestuurd.
+        //Als de variabele $conn leeg is wordt het uitvoeren gestopt en de SQL foutmelding naar de browser gestuurd.
 	    if (!$conn) {
 	    	die("Connection failed: " . mysqli_connect_error());
         };
 
-        //SQL query maken
+        //SQL INSERT query maken
         $sql = "INSERT INTO lid (Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum) 
         VALUES (\"$Voornaam\", \"$Voorvoegsel\", \"$Achternaam\", \"$Straatnaam\", \"$Huisnummer\", \"$Woonplaats\", \"$Postcode\", \"$Telefoonnummer\", \"$Emailadres\", \"$Geboortedatum\")";
         //SQL query uitvoeren
@@ -32,7 +33,6 @@
         //Als de SQL query een foutmelding registreert 
         if (mysqli_error($conn)) {
             echo "<p class=\"text-center\">Er is iets fout gegaan bij het aanmaken van het lid. Zie onderstaande foutmelding.<br>" . mysqli_error($conn) . "</p>";
-            //Echo mysqli_error($conn);
             die;
         }
     die("<p class=\"text-center\">Lid toegevoegd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
@@ -55,6 +55,7 @@
 	$user = mysqli_fetch_assoc($result);
 	echo mysqli_use_result($conn);
 ?> 
+
 <form method = "post">
 <div class="container-fluid"
   <div class="form-group">
