@@ -53,7 +53,6 @@
 		die;
 	};
 	$user = mysqli_fetch_assoc($result);
-	echo mysqli_use_result($conn);
 ?> 
 
 <form method = "post">
