@@ -21,10 +21,12 @@
 	.table-responsive {
         background: #fff;
         padding: 20px 25px;
-        margin: 30px 0;
+        margin: 0px 0;
 		border-radius: 3px;
         box-shadow: 0 1px 1px rgba(0,0,0,.05);
-		width: 100%
+		width: 100%;
+		overflow-x: scroll;
+		max-height: 850px;
     }
 	.table-title {        
 		padding-bottom: 15px;
@@ -89,8 +91,7 @@
         margin: 0 5px;
     }
 	table.table td a {
-		font-weight: bold;
-		color: #566787;
+		color: #ffffff;
 		display: inline-block;
 		text-decoration: none;
 		outline: none !important;

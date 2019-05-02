@@ -1,6 +1,6 @@
 <?php include "./templates/header.php"; ?>
 <?php 
-    require "./config/configsql.php"; //Bevat variabelen om met SQL te kunnen verbinden.
+    require "./functies/common.php";
     if (isset($_POST['submit'])){ //Als $_POST['submit'] ingesteld is, voer onderstaande code uit.
         
         //$_POST variabelen omzetten naar normale variabelen zodat deze gebruikt kunnen worden in de SQL statement
@@ -15,39 +15,15 @@
         $Emailadres = $_POST["Emailadres"];
         $Geboortedatum = $_POST["Geboortedatum"];
         $Lid_nr = $_POST["Lid_nr"];
-
-        //Verbinden met mysql
-        $conn = mysqli_connect($host, $username, $password, $dbname);
-        
-        //Als de variabele $conn leeg is wordt het uitvoeren gestopt en de foutmelding naar de browser gestuurd.
-	    if (!$conn) {
-	    	die("Connection failed: " . mysqli_connect_error());
-        };
-
         //SQL query maken
-        $sql = "UPDATE lid SET Voornaam = \"$Voornaam\", Voorvoegsel = \"$Voorvoegsel\", Achternaam = \"$Achternaam\", Straatnaam = \"$Straatnaam\", Huisnummer = \"$Huisnummer\", Woonplaats = \"$Woonplaats\", Postcode = \"$Postcode\", Telefoonnummer = \"$Telefoonnummer\", Emailadres = \"$Emailadres\", Geboortedatum = \"$Geboortedatum\" WHERE Lid_nr = \"$Lid_nr\"";
-        //SQL query uitvoeren
-        mysqli_query($conn, $sql);
-        
-        //Als de SQL query een foutmelding registreert 
-        if (mysqli_error($conn)) {
-            echo "Er is iets fout gegaan bij het aanpassen van het lid. Zie onderstaande foutmelding.<br>";
-            Echo mysqli_error($conn);
-            die;
-        }
-    die("<p class=\"text-center\">Lid aangepast! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
+        sqlquery ("UPDATE Lid SET Voornaam = \"$Voornaam\", Voorvoegsel = \"$Voorvoegsel\", Achternaam = \"$Achternaam\", Straatnaam = \"$Straatnaam\", Huisnummer = \"$Huisnummer\", Woonplaats = \"$Woonplaats\", Postcode = \"$Postcode\", Telefoonnummer = \"$Telefoonnummer\", Emailadres = \"$Emailadres\", Geboortedatum = \"$Geboortedatum\" WHERE Lid_nr = \"$Lid_nr\"");
+        die("<p class=\"text-center\">Lid aangepast! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
     }
     if (isset($_GET['Lid_nr'])) {
-        $conn = mysqli_connect($host, $username, $password, $dbname);
-	    // Check connection
-	    if (!$conn) {
-	    	die("Connection failed: " . mysqli_connect_error());
-        };
+
+        $result = sqlquery ("SELECT * FROM lid WHERE lid_nr = $_GET[Lid_nr]");
         
-        $sql = "SELECT * FROM lid WHERE lid_nr = $_GET[Lid_nr]";
-        $result = mysqli_query($conn, $sql);
-        
-	    if (mysqli_num_rows($result) < 1) {
+	    if (mysqli_num_rows($result) != 1) {
 	       	die("no results");
         };
         $user = mysqli_fetch_assoc($result);

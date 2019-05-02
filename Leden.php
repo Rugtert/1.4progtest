@@ -1,21 +1,7 @@
 <?php include "./templates/header.php"; ?>
 <?php
-	require "./config/configsql.php";
-	// Create connection
-	$conn = mysqli_connect($host, $username, $password, $dbname);
-	// Check connection
-	if (!$conn) {
-		die("Connection failed: " . mysqli_connect_error());
-	};
-	$sql = "SELECT Lid_nr, Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum FROM lid ORDER BY Lid_nr";
-	$result = mysqli_query($conn, $sql);
-	//Als de SQL query een foutmelding registreert 
-	if (mysqli_error($conn)) {
-		die("Er is iets fout gegaan bij het opvragen van de leden. Zie onderstaande foutmelding.<br>" . mysqli_error($conn));
-	}
-	if (mysqli_num_rows($result) < 1) {
-		die("no results");
-	};
+	require "./functies/common.php";
+	$result = sqlquery('SELECT Lid_nr, Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum FROM lid ORDER BY Lid_nr');
 ?>
 <div class="container-fluid">
     <div class="table-responsive">
@@ -54,8 +40,8 @@
 				<td><?php echo $row["Geboortedatum"]?></td>
 				<td></td>
 				<td></td>
-				<td><a href="Lid_aanpassen.php?Lid_nr=<?php echo $row["Lid_nr"];?>">Aanpassen</a></td>
-				<td><a href="Lid_Verwijderen.php?Lid_nr=<?php echo $row["Lid_nr"];?>">Verwijderen</a></td>
+				<td><a href="Lid_aanpassen.php?Lid_nr=<?php echo $row["Lid_nr"];?>" class = "btn btn-primary mb-2">Aanpassen</a></td>
+				<td><a href="Lid_Verwijderen.php?Lid_nr=<?php echo $row["Lid_nr"];?>" class = "btn btn-primary mb-2">Verwijderen</a></td>
 			</tr>
 			<?php endforeach ?>
             </tbody>

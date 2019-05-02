@@ -1,9 +1,8 @@
 <?php include "./templates/header.php"; ?>
 
 <?php 
-    require "./config/configsql.php"; //Bevat variabelen om met SQL te kunnen verbinden.
+    require "./functies/common.php";
     if (isset($_POST['submit'])){ //Als $_POST['submit'] ingesteld is, voer onderstaande code uit.
-        
         //$_POST variabelen omzetten naar normale variabelen zodat deze makkelijker gebruikt kunnen worden in de SQL statement
         $Voornaam = $_POST["Voornaam"];
         $Voorvoegsel = $_POST["Voorvoegsel"];
@@ -16,42 +15,12 @@
         $Emailadres = $_POST["Emailadres"];
         $Geboortedatum = $_POST["Geboortedatum"];
 
-        //Verbinden met mysql
-        $conn = mysqli_connect($host, $username, $password, $dbname);
-        
-        //Als de variabele $conn leeg is wordt het uitvoeren gestopt en de SQL foutmelding naar de browser gestuurd.
-	    if (!$conn) {
-	    	die("Connection failed: " . mysqli_connect_error());
-        };
-
-        //SQL INSERT query maken
-        $sql = "INSERT INTO lid (Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum) 
-        VALUES (\"$Voornaam\", \"$Voorvoegsel\", \"$Achternaam\", \"$Straatnaam\", \"$Huisnummer\", \"$Woonplaats\", \"$Postcode\", \"$Telefoonnummer\", \"$Emailadres\", \"$Geboortedatum\")";
-        //SQL query uitvoeren
-        mysqli_query($conn, $sql);
-        
-        //Als de SQL query een foutmelding registreert 
-        if (mysqli_error($conn)) {
-            echo "<p class=\"text-center\">Er is iets fout gegaan bij het aanmaken van het lid. Zie onderstaande foutmelding.<br>" . mysqli_error($conn) . "</p>";
-            die;
-        }
-    die("<p class=\"text-center\">Lid toegevoegd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
+        //functie sqlquery uitvoeren om gegevens uit de database op te vragen
+        sqlquery ("INSERT INTO lid (Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum) 
+                    VALUES (\"$Voornaam\", \"$Voorvoegsel\", \"$Achternaam\", \"$Straatnaam\", \"$Huisnummer\", \"$Woonplaats\", \"$Postcode\", \"$Telefoonnummer\", \"$Emailadres\", \"$Geboortedatum\")");
+        die("<p class=\"text-center\">Lid toegevoegd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
 	}
-	
-	//SQL verbinding maken
-    $conn = mysqli_connect($host, $username, $password, $dbname);
-    // Check connection
-    if (!$conn) {
-    	die("Connection failed: " . mysqli_connect_error());
-    };
-	
-	$sql = "SELECT * FROM lid";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_error($conn)) {
-		echo "Er is iets fout gegaan bij het opvragen van de basisgegevens. Zie onderstaande foutmelding.<br>";
-		Echo mysqli_error($conn);
-		die;
-	};
+	$result = sqlquery ("SELECT * FROM lid");
 	$user = mysqli_fetch_assoc($result);
 ?> 
 
