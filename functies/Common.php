@@ -2,32 +2,29 @@
 <?php
     function sqlquery ($query){
         // Voert een sqlquery uit op de database
-        // Verbinding maken
-        /* activate reporting */
+
+        // Report mode instellen zodat er gebruik gemaakt kan worden van een try & catch
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        // Variabelen voor de verbinding declareren
         $host = "localhost";
         $username = "root";
         $password = "";
         $dbname = "debieb";
         
         try {
+            // Verbinding maken
             $conn = mysqli_connect($host, $username, $password, $dbname);
-            $sql = $query;
-            $result = mysqli_query($conn, $sql);
+            // Query uitvoeren
+            $result = mysqli_query($conn, $query);
             return $result;
+            //verbinding sluiten
             mysqli_close($conn);
         }
+        //Foutmeldingen afvangen met een catch zodat deze gebruikt kan worden in de code die de functie aanroept.
         catch (mysqli_sql_exception $e) {
-            //echo $e;
-            if (mysqli_errno($conn) == "1451") { echo "er zijn nog afhankelijkheden.";}
-            echo mysqli_errno($conn);
+            return mysqli_errno($conn);
             die;
         }
-
-        /* Als de SQL query een foutmelding registreert stop dan met uitvoeren
-        if (mysqli_error($conn)) {
-            die("Er is iets fout gegaan bij het opvragen van de leden. Zie onderstaande foutmelding.<br>" . mysqli_error($conn));
-        }
-        // Resultaat teruggeven en verbinding sluiten*/
     }
 ?>

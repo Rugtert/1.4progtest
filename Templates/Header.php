@@ -28,6 +28,11 @@
 		overflow-x: scroll;
 		max-height: 850px;
     }
+	.table-wrapper {
+        background: #fff;
+        padding: 20px 25px;
+        margin: 30px 0;
+	}
 	.table-title {        
 		padding-bottom: 15px;
 		background: #435d7d;

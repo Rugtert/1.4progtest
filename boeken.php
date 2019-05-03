@@ -1,28 +1,28 @@
 <?php include "./templates/header.php"; ?>
 <?php
 	require "./functies/common.php";
-	$result = sqlquery('SELECT boek.ISBN, Boek.Titel, Druk, onderwerp.naam as "Onderwerp", Seriedeelnr, auteur.voornaam, auteur.achternaam, serie.titel as "titel van serie" FROM boek
-                JOIN auteur on boek.Auteur_nr = auteur.Auteur_nr
-                left JOIN serie on boek.Serie_nr = serie.Serie_nr
-                JOIN boek_onderwerp on boek.isbn = boek_onderwerp.ISBN
-                JOIN onderwerp on boek_onderwerp.NUR_CODE = onderwerp.NUR_Code');
+	$result = sqlquery('SELECT count(exemplaar.Boek_nr) AS "aantal exemplaren", boek.ISBN, Boek.Titel, Druk, Seriedeelnr, auteur.voornaam, auteur.achternaam, serie.titel as "titel van serie" FROM boek
+							LEFT JOIN auteur on boek.Auteur_nr = auteur.Auteur_nr
+							left JOIN serie on boek.Serie_nr = serie.Serie_nr
+							LEFT JOIN exemplaar on boek.ISBN = exemplaar.ISBN
+							GROUP BY Boek.ISBN');
 ?>
 <div class="container-fluid">
     <div class="table-responsive">
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
-					<h2><b>Overzicht leden</b></h2>
+					<h2><b>Overzicht Boeken</b></h2>
 				</div>
             </div>
         </div>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th>Aantal Exemplaren</th>
                     <th>ISBN</th>
-                    <th>Naam</th>
-					<th>Druk</th>
-                    <th>Onderwerp</th>
+					<th>Naam</th>
+                    <th>Druk</th>
                     <th>Auteur</th>
 					<th>Titel van serie</th>
 					<th>Deel van serie</th>
@@ -35,10 +35,10 @@
 				foreach ($result as $row) :
 			?>
 			<tr>
-				<td><?php echo $row["ISBN"];?></td>
-				<td><?php echo $row["Titel"]?></td>
-				<td><?php echo $row['Druk']?></td>
-				<td><?php echo $row["Onderwerp"]?></td>
+				<td><?php echo $row["aantal exemplaren"];?></td>
+				<td><?php echo $row["ISBN"]?></td>
+				<td><?php echo $row['Titel']?></td>
+				<td><?php echo $row["Druk"]?></td>
 				<td><?php echo $row["voornaam"] . " " . $row["achternaam"]?></td>
 				<td><?php echo $row["titel van serie"]?></td>
 				<td><?php echo $row["Seriedeelnr"]?></td>
