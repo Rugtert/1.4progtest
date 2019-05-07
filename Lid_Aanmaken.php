@@ -25,7 +25,7 @@
 ?> 
 
 <form method = "post">
-<div class="container-fluid"
+<div class="container-fluid">
   <div class="form-group">
     <?php foreach ($user as $key => $value) : ?>
 	<?php
