@@ -5,7 +5,7 @@
                                 JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
                                 JOIN Boek on exemplaar.ISBN = Boek.isbn
                                 WHERE lid_nr = $_GET[Lid_nr]");
-    if (isset($Heeftnogleningen)){?>
+    if (($Heeftnogleningen->num_rows) > "0"){?>
         <div class="container">
         <div class="table-responsive">
             <div class="table-title">
@@ -42,19 +42,27 @@
             </table>
             <form method="post">
             <a href="leden.php?>" class = "btn btn-primary mb-2">Annuleren</a>
-            <input name="verwijderen" type="submit" value="verwijderen" class = "btn btn-danger">
-            <?php if(isset($_POST['verwijderen'])){
+            <input name="verwijderen2" type="submit" value="verwijderen" class = "btn btn-danger">
+            </form>
+            <?php if(isset($_POST['verwijderen2'])){
                     $result = sqlquery("DELETE FROM lid WHERE lid_nr = $_GET[Lid_nr]");
-                    die("<p class=\"text-center\">Lid verwijderd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
+                    if ($result !=1) {Echo "er is iets fout gegaan bij het verwijderen. Foutcode: $result";}
+                    Else {die("<p class=\"text-center\">Lid verwijderd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");}
             }?>
         </div>
     </div>
 <?php
     }
-    Else  {
-        $result = sqlquery("DELETE FROM lid WHERE lid_nr = $_GET[Lid_nr]");
-        die("<p class=\"text-center\">Lid verwijderd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");
+    Else  {?>
+        Weet je zeker dat je het lid wilt verwijderen?
+        <form method="post"><input name="verwijderen2" type="submit" value="verwijderen" class = "btn btn-danger">
+        <a href="leden.php?>" class = "btn btn-primary mb-2">Annuleren</a></form><?php
+        if(isset($_POST['verwijderen2'])){
+            $result = sqlquery("DELETE FROM lid WHERE lid_nr = $_GET[Lid_nr]");
+            if ($result !=1) {Echo "er is iets fout gegaan bij het verwijderen. Foutcode: $result";}
+        Else {die("<p class=\"text-center\">Lid verwijderd! <a href=\"./Leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>");}
     }
+}
     
 ?>
 
