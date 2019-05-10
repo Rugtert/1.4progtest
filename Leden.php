@@ -5,8 +5,8 @@
 
 	//vind de gebruikers die nog boeken geleend hebben. Wordt later gebruikt
 	$Heeftnogleningen = array();
-	$HeeftNogLeningenQuery = sqlquery("SELECT DISTINCT Lid_nr FROM lening");
-	foreach ($HeeftNogLeningenQuery as $lidnr) { array_push($Heeftnogleningen, $lidnr['Lid_nr']);}
+	$HeeftNogLeningenQuery = sqlquery("SELECT DISTINCT Lid_nr FROM lening WHERE inleverdatum IS NULL");
+	foreach ($HeeftNogLeningenQuery as $lidnr) { array_push($Heeftnogleningen, $lidnr['Lid_nr']);};
 
 ?>
 
@@ -35,78 +35,16 @@
 			mysqli_errno($lid);
 		}
 	}
-	if (isset($_POST['VerwijderlidMetGeleendeBoeken'])) {
-		Echo $_POST;
-	}
 	//Als $_POST['Verwijderen'] ingevuld is wordt code uitgevoerd dat het lid aanpast met de variabelen uit de array $_POST
 	if (isset($_POST['Verwijderen'])) {
-		$Heeftnogleningen = sqlquery("SELECT Lid_nr,lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
-                                JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
-                                JOIN Boek on exemplaar.ISBN = Boek.isbn
-                                WHERE lid_nr = $_POST[Lid_nr]");
-    	if (($Heeftnogleningen->num_rows) > "0"){?>
-    	    <div class="container">
-    	        <div class="table-responsive">
-    	            <div class="table-title">
-    	                <div class="row">
-    	                    <div class="col-sm-12">
-    	                        <h2><b>Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je dit lid wilt verwijderen?</b></h2>
-    	                    </div>
-    	                </div>
-    	            </div>
-    	            <table class="table table-striped table-hover">
-    	                <thead>
-    	                    <tr>
-    	                        <th>Boek nummer</th>
-    	                        <th>Titel</th>
-    	                        <th>ISBN</th>
-    	                    </tr>
-    	                </thead>
-    	                <tbody>
-    	                <?php
-    	                    // output data of each row
-    	                    foreach ($Heeftnogleningen as $row) :
-    	                ?>
-    	                <tr>
-    	                    <td><?php echo $row["Boek_nr"]?></td>
-    	                    <td><?php echo $row["Titel"]?></td>
-    	                    <td><?php echo $row["ISBN"]?></td>
-    	                </tr>
-    	                <?php 
-    	                    endforeach;
-    	                ?>
-    	                </tbody>
-    	            </table>
-    	            <form method="post">
-    	            	<a href="leden.php?>" class = "btn btn-primary mb-2">Annuleren</a>
-						<input name="Verwijderen" type="hidden" value="verwijderen" class = "btn btn-danger">
-						<input name="Lid_nr" type="hidden" value="<?php echo $_POST['Lid_nr']?> " class = "btn btn-danger">
-    	            	<input name="verwijderen2" type="submit" value="verwijderen" class = "btn btn-danger">
-    	            </form>
-    	            <?php if(isset($_POST['verwijderen2'])){
-    	                    $result = sqlquery("DELETE FROM lid WHERE lid_nr = $_POST[Lid_nr]");
-    	                    if ($result !=1) {
-								Echo "er is iets fout gegaan bij het verwijderen. Foutcode: $result";
-							}
-    	                    Else {
-								echo "<p class=\"text-center\"><h2>Lid verwijderd!</h2> <a href=\"./leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>";
-							}
-    	                }?>
-    	        </div>
-    	    </div>
-<?php 
-		}
-		Else{
-				$result = sqlquery("DELETE FROM lid WHERE lid_nr = $_POST[Lid_nr]");
-				if ($result !=1) {
-					Echo "er is iets fout gegaan bij het verwijderen. Foutcode: $result"; die;
-				}
-			   	Else {
-					   //echo "<p class=\"text-center\"><h2>Lid verwijderd!</h2> <a href=\"./leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>";
-					}
-   		}
-	}
-?>
+		$result = sqlquery("DELETE FROM lid WHERE lid_nr = $_POST[Lid_nr]");
+    	    if ($result !=1) {
+				Echo "er is iets fout gegaan bij het verwijderen. Foutcode: $result";
+			}
+    	    Else {
+				//echo "<p class=\"text-center\"><h2>Lid verwijderd!</h2> <a href=\"./leden.php\" class=\"btn btn-primary mb-2\">Terug naar de ledenpagina</a></p>";
+			}
+	}?>
 
 <?php
 	//vraagt leden op uit de tabel "lid" en plaatst ze in de variabele $result
@@ -155,11 +93,6 @@
 							<?php //Verwijst naar het dialoogvenster "Aanpassenlid<Lid_nr>" ?>
 							<td><a href="#Aanpassenlid<?php echo $row["Lid_nr"];?>" class = "btn btn-primary mb-2" data-toggle="modal" data-target="#Aanpassenlid<?php echo $row["Lid_nr"];?>">Aanpassen</a></td>
 							<td><a href="#Verwijderenlid<?php echo $row["Lid_nr"];?>" class = "btn btn-danger" data-toggle="modal" data-target="#Verwijderenlid<?php echo $row["Lid_nr"];?>">Verwijderen</a></td>	
-
-							<form method="post" action="./leden.php">
-								<input type="hidden" name="Lid_nr" value=<?php echo $row['Lid_nr'] ?>>
-		        		    	<td><input type="Submit" class="btn btn-danger" name="Verwijderen" value="Verwijderen - oud"></td>
-							</form>
 						</tr>
 
 					<?php endforeach ;?>
@@ -220,7 +153,7 @@
 					<?php foreach ($row as $key => $value) : 
 						if ($key == 'Lid_nr') {
 					?>
-							<input type="hidden" class="form-control" name="<?php echo "$key"?>" value="<?php echo "$value"?>">
+						<input type="hidden" class="form-control" name="<?php echo "$key"?>" value="<?php echo "$value"?>">
 					<?php 
 						}
 						else {
@@ -242,54 +175,67 @@
 <?php endforeach ?>
 
 
-<?php foreach ($result as $row) { ?>
+<?php foreach ($result as $row) : ?>
 	<!-- Edit Modal HTML -->
 	<div id="Verwijderenlid<?php echo $row['Lid_nr'];?>" class="modal fade">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<?php if (in_array($row['Lid_nr'], $Heeftnogleningen)) { ?>
+					<form method="post" action="./leden.php">
+						<div class="modal-header">						
+							<h4 class="modal-title">Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je lid <?php echo $row['Lid_nr'];?> wilt verwijderen?</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped table-hover">
+    	        	        	<thead>
+    	        	            <tr>
+    	        	                <th>Boek nummer</th>
+    	        	                <th>Titel</th>
+    	        	                <th>ISBN</th>
+    	        	            </tr>
+    	        	        	</thead>
+    	        	        	<tbody>
+								<?php $LidLening = sqlquery("	SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
+																JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
+																JOIN Boek on exemplaar.ISBN = Boek.isbn
+																WHERE lid_nr =  $row[Lid_nr]
+																AND Inleverdatum IS NULL");
+									foreach ($LidLening as $lening) : 
+								?>
+									<tr>
+										<td><?php echo $lening['Boek_nr']?></td>
+										<td><?php echo $lening['Titel']?></td>
+										<td><?php echo $lening['ISBN']?></td>
+									</tr>
+								<?php endforeach ?>
+								</tbody>
+    	        	    	</table>
+						</div>
+						<div class="modal-footer">
+							<input type="hidden" name="Lid_nr" Value="<?php echo $row['Lid_nr'];?>">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+							<input type="submit" class="btn btn-danger" name="Verwijderen" value="Verwijderen">
+						</div>
+					</form>
+				<?php } 
+				else { ?>
 				<form method="post" action="./leden.php">
 					<div class="modal-header">						
-						<h4 class="modal-title">Verwijderen lid <?php echo $row['Lid_nr'];?></h4>
+						<h4 class="modal-title"> Weet je zeker dat je  lid nummer <?php echo $row['Lid_nr'];?> wilt verwijderen?</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body">
-						<table class="table table-striped table-hover">
-    	                	<thead>
-    	                    <tr>
-    	                        <th>Boek nummer</th>
-    	                        <th>Titel</th>
-    	                        <th>ISBN</th>
-    	                    </tr>
-    	                	</thead>
-    	                	<tbody>
-							<?php $LidLening = sqlquery("	SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
-															JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
-															JOIN Boek on exemplaar.ISBN = Boek.isbn
-															WHERE lid_nr =  $row[Lid_nr]");
-								foreach ($LidLening as $lening) : 
-							?>
-								<tr>
-									<td><?php echo $lening['Boek_nr']?></td>
-									<td><?php echo $lening['Titel']?></td>
-									<td><?php echo $lening['ISBN']?></td>
-								</tr>
-							<?php endforeach ?>
-							</tbody>
-    	            	</table>
-					</div>
 					<div class="modal-footer">
+						<input type="hidden" name="Lid_nr" Value="<?php echo $row['Lid_nr'];?>">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" name="Aanpassen" value="Aanpassen">
+						<input type="submit" class="btn btn-danger" name="Verwijderen" value="Verwijderen">
 					</div>
 				</form>
-				<? } else {
-					bla;
-				} ?>
+			<?php	} ?>
 			</div>
 		</div>
 	</div>
 
-<?php }}?>
+<?php endforeach ?>
 
 <?php include "./Templates/footer.php"; ?>

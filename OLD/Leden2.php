@@ -252,7 +252,7 @@
 		//foreach ($keys as $key) {var_dump($key);}
 ?>
 		<div id="Toevoegenlid" class="modal">
-   			<div class="modal-dialog">
+   			<div class="modal-dialog" style="max-width: 8000px">
    				<div class="modal-content">
    					<form method="post" action="./leden.php">
    						<div class="modal-header">						

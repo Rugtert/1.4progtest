@@ -211,6 +211,9 @@
 	.modal .modal-dialog {
 		max-width: 400px;
 	}
+	.modal .modal-lg{
+		max-width: 800px;
+	}
 	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
 		padding: 20px 30px;
 		
