@@ -68,7 +68,9 @@
 		float: left;
 		margin-top: 2px;
 	}
-	
+	.table .thead-light{
+		
+	}
     table.table tr th, table.table tr td {
         border-color: #e9e9e9;
 		padding: 12px 15px;
