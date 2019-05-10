@@ -213,12 +213,12 @@
 	}
 	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
 		padding: 20px 30px;
+		
 	}
 	.modal .modal-content {
 		border-radius: 3px;
 	}
 	.modal .modal-footer {
-		background: #ecf0f1;
 		border-radius: 0 0 3px 3px;
 	}
     .modal .modal-title {

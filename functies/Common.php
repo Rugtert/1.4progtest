@@ -23,7 +23,7 @@
         }
         //Foutmeldingen afvangen met een catch zodat deze gebruikt kan worden in de code die de functie aanroept.
         catch (mysqli_sql_exception $e) {
-            return mysqli_errno($conn);
+            return mysqli_error($conn);
             die;
         }
     }
