@@ -3,20 +3,21 @@
 	//bevat algemene functies die op meerdere plaatsen gebruikt worden.
 	require "./functies/common.php";
 	
-	function GetLedenMetGeleendeBoeken () { //vind de gebruikers die nog boeken geleend hebben.
+	function GetArrayLedenMetGeleendeBoeken () { //vind de leden die nog boeken geleend hebben.
 		$LedenMetGeleendeBoeken = array();
 		$LedenMetGeleendeBoekenQuery = sqlquery("SELECT DISTINCT Lid_nr FROM lening WHERE inleverdatum IS NULL");
 		foreach ($LedenMetGeleendeBoekenQuery as $lidnr) { array_push($LedenMetGeleendeBoeken, $lidnr['Lid_nr']);};
 		return $LedenMetGeleendeBoeken;
 	}
 
-	function GetBoekenOpDitMomentGeleendDoorLid ($Lid_nr) { // 
+	function GetBoekenOpDitMomentGeleendDoorLid ($Lid_nr) { // vind de boeken die een lid ($Lid_nr) op dit moment geleend heeft (Inleverdatum IS NULL).
 		$BoekenOpDitMomentGeleendDoorLid = sqlquery(
-		"SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
-		JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
-		JOIN Boek on exemplaar.ISBN = Boek.isbn
-		WHERE lid_nr = $Lid_nr
-		AND Inleverdatum IS NULL");
+			"SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
+			JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
+			JOIN Boek on exemplaar.ISBN = Boek.isbn
+			WHERE lid_nr = $Lid_nr
+			AND Inleverdatum IS NULL"
+		);
 		return $BoekenOpDitMomentGeleendDoorLid;
 	}
 
@@ -25,17 +26,47 @@
 		return $Keys;
 	}
 
-	function LidToevoegen () { // Voegt een lid toe met de waarden uit $_POST.
+	function LidToevoegen () { // Voegt een lid toe met waarden uit $_POST.
 		$lid = sqlquery (
-			"INSERT INTO lid (Voornaam, Voorvoegsel, Achternaam, Straatnaam, Huisnummer, Woonplaats, Postcode, Telefoonnummer, Emailadres, Geboortedatum) 
-			VALUES (\"$_POST[Voornaam]\", \"$_POST[Voorvoegsel]\", \"$_POST[Achternaam]\", \"$_POST[Straatnaam]\", \"$_POST[Huisnummer]\", \"$_POST[Woonplaats]\", \"$_POST[Postcode]\", \"$_POST[Telefoonnummer]\", \"$_POST[Emailadres]\", \"$_POST[Geboortedatum]\")"
+			"INSERT INTO lid (
+				Voornaam, 
+				Voorvoegsel, 
+				Achternaam, 
+				Straatnaam, 
+				Huisnummer, 
+				Woonplaats, 
+				Postcode, 
+				Telefoonnummer, 
+				Emailadres, 
+				Geboortedatum) 
+			VALUES (
+				\"$_POST[Voornaam]\", 
+				\"$_POST[Voorvoegsel]\", 
+				\"$_POST[Achternaam]\", 
+				\"$_POST[Straatnaam]\", 
+				\"$_POST[Huisnummer]\", 
+				\"$_POST[Woonplaats]\", 
+				\"$_POST[Postcode]\", 
+				\"$_POST[Telefoonnummer]\", 
+				\"$_POST[Emailadres]\", 
+				\"$_POST[Geboortedatum]\")"
 		);
 		return $lid;
 	}
 	
 	function LidAanpassen () { // Past een lid aan met de waarden uit $_POST.
 		$lid = sqlquery (
-			"UPDATE Lid SET Voornaam = \"$_POST[Voornaam]\", Achternaam = \"$_POST[Achternaam]\", Straatnaam = \"$_POST[Straatnaam]\", Huisnummer = \"$_POST[Huisnummer]\", Woonplaats = \"$_POST[Woonplaats]\", Postcode = \"$_POST[Postcode]\", Telefoonnummer = \"$_POST[Telefoonnummer]\", Emailadres = \"$_POST[Emailadres]\", Geboortedatum = \"$_POST[Geboortedatum]\" WHERE Lid_nr = $_POST[Lid_nr]"
+			"UPDATE Lid SET 
+			Voornaam = \"$_POST[Voornaam]\", 
+			Achternaam = \"$_POST[Achternaam]\", 
+			Straatnaam = \"$_POST[Straatnaam]\",
+			Huisnummer = \"$_POST[Huisnummer]\", 
+			Woonplaats = \"$_POST[Woonplaats]\", 
+			Postcode = \"$_POST[Postcode]\", 
+			Telefoonnummer = \"$_POST[Telefoonnummer]\", 
+			Emailadres = \"$_POST[Emailadres]\", 
+			Geboortedatum = \"$_POST[Geboortedatum]\" 
+			WHERE Lid_nr = $_POST[Lid_nr]"
 		);
 		return $lid;
 	}
@@ -220,7 +251,7 @@
 		*/
 ?>
 <?php 
-	$LedenMetGeleendeBoeken = GetLedenMetGeleendeBoeken(); // Dialoogvenster "verwijderlid" wordt anders ingevuld als het lid nog boeken heeft geleend.
+	$LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken(); // Dialoogvenster "verwijderlid" wordt anders ingevuld als het lid nog boeken heeft geleend.
 	foreach ($Leden as $Lid) : 
 ?>
 		<div id="Verwijderenlid<?php echo $Lid['Lid_nr'];?>" class="modal fade">
