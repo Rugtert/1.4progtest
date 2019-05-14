@@ -26,7 +26,7 @@ function GetBoekenOpDitMomentGeleendDoorLid($Lid_nr)
 }
 
 function GetTableKeys($table)
-{
+{//Pakt de keys van een MySQL table ($table)
     $Keys = array_keys(mysqli_fetch_assoc(sqlquery("SELECT * FROM $table")));
     return $Keys;
 }
@@ -227,7 +227,11 @@ $keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in d
                             Else {
                                 ?>
                                 <div class="form-group">
-                                    <label><?php echo $key ?></label>
+                                    <?php if ($key == "Geboortedatum") { ?> <label><?php echo $key ?> (Jaar-Maand-Dag,
+                                        bijv; 1989-12-31)</label>
+                                    <?php } else { ?>
+                                        <label><?php echo $key ?> </label>
+                                    <?php } ?>
                                     <input type="text" name="<?php echo $key ?>" class="form-control">
                                 </div>
                             <?php } endforeach ?>
@@ -268,7 +272,11 @@ foreach ($Leden as $Lid) :
                             } else {
                                 ?>
                                 <div class="form-group">
-                                    <label><?php echo "$key" ?></label>
+                                    <?php if ($key == "Geboortedatum") { ?> <label><?php echo $key ?> (Jaar-Maand-Dag,
+                                        bijv; 1989-12-31)</label>
+                                    <?php } else { ?>
+                                        <label><?php echo $key ?> </label>
+                                    <?php } ?>
                                     <input type="text" class="form-control" name="<?php echo "$key" ?>"
                                            value="<?php echo "$value" ?>">
                                 </div>
