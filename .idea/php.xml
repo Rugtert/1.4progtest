@@ -21,4 +21,9 @@
       <extension name="yar" enabled="true" />
     </extensions>
   </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings load_method="PHPUNIT_PHAR" custom_loader_path="" phpunit_phar_path="$PROJECT_DIR$/../../php/phpunit.phar" />
+    </phpunit_settings>
+  </component>
 </project>

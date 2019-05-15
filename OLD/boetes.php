@@ -1,7 +1,7 @@
 
 <?php
 	//bevat algemene functies die op meerdere plaatsen gebruikt worden.
-	require "./functies/common.php";
+	require "./functies/Common.php";
     $lening = sqlquery(
         "SELECT Lid_nr, Boetetarief,Uitleengrondslag,Uitleentijdstip FROM exemplaar 
         JOIN Lening 

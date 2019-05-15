@@ -1,10 +1,11 @@
-<?php include "./templates/header.php"; ?>
 <?php
-//bevat algemene functies die op meerdere plaatsen gebruikt worden.
-require "./functies/common.php";
+include "./templates/header.php"; //CSS en HTML Header.
+require "./functies/common.php"; //bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
+?>
 
+<?php
 function GetArrayLedenMetGeleendeBoeken()
-{ //vind de leden die nog boeken geleend hebben.
+{ //vind de leden die nog boeken geleend hebben.Ø
     $LedenMetGeleendeBoeken = array();
     $LedenMetGeleendeBoekenQuery = sqlquery("SELECT DISTINCT Lid_nr FROM lening WHERE inleverdatum IS NULL");
     foreach ($LedenMetGeleendeBoekenQuery as $lidnr) {
@@ -14,7 +15,7 @@ function GetArrayLedenMetGeleendeBoeken()
 }
 
 function GetBoekenOpDitMomentGeleendDoorLid($Lid_nr)
-{ // vind de boeken die een lid ($Lid_nr) op dit moment geleend heeft (Inleverdatum IS NULL).
+{ // vind de boeken die een lid ($Lid_nr) op dit moment geleend heeft (Inleverdatum IS NULL). Geeft het mysqli resultaat terug bij een geslaagde bewerking en de mysqli foutmelding bij een mislukte bewerking.
     $BoekenOpDitMomentGeleendDoorLid = sqlquery(
         "SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
 			JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
@@ -32,7 +33,7 @@ function GetTableKeys($table)
 }
 
 function LidToevoegen()
-{ // Voegt een lid toe met waarden uit $_POST.
+{ // Voegt een lid toe met waarden uit $_POST. Geeft de waarde "1" terug bij een geslaagde bewerking. Geeft de mysqli foutmelding terug bij een mislukte bewerking.
     $lid = sqlquery(
         "INSERT INTO lid (
 				Voornaam, 
@@ -86,21 +87,19 @@ function LidVerwijderen()
     return $lid;
 }
 
-function GetOpenstaandeBoeteBedragenVanLid($Lid_nr)
+function GetOpenstaandeBoeteBedragenVanLid($lening, $Lid_nr)
 { // Vind de openstaande boetes van een lid en telt ze bij elkaar op. Het eindresultaat ($boetetotaal) is het totaal van de boetes.
-    $lening = sqlquery(
-        "SELECT Boetetarief,Uitleengrondslag,Uitleentijdstip FROM exemplaar 
-			JOIN Lening 
-			WHERE lening.Inleverdatum IS NULL AND lening.lid_nr = $Lid_nr"
-    );
     $boetetotaal = 0;
     Foreach ($lening as $boete) {
-        $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
-        $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van $boete["uitleengrondslag"] dagen (D))
-        $Today = new DateTime('now'); // Huidige tijdstip om "vandaag" te bepalen
-        $Interval = date_diff($BoeteTellingStart, $Today); // het tijdsverschil tussen de waarden BoeteTellingStart en Today
-        if ($Interval->format("%a") > 0) { // Alleen als het verschil tussen BoetetellingStart en Today groter is dan 0 mag onderstaande code uitgevoerd te worden.
+        if ($boete['Lid_nr'] == $Lid_nr) {
+            $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
+            $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van
+            // $boete["uitleengrondslag"] dagen (D))
+            $Today = new DateTime('now'); // Huidige tijdstip om "vandaag" te bepalen
+            $Interval = date_diff($BoeteTellingStart, $Today); // het tijdsverschil tussen de waarden BoeteTellingStart en Today
+
             $boetetotaal += ($Interval->format("%a") * round($boete["Boetetarief"], 2)); // Multipliceert (*) $interval met $boete["boetetarief"] en telt het resultaat op bij $boetetotaal.
+
         }
     };
     return $boetetotaal;
@@ -142,6 +141,12 @@ if (isset($_POST['Verwijderen'])) {
 <?php
 //vraagt leden op uit de tabel "lid" en plaatst ze in de variabele $Leden
 $Leden = sqlquery("SELECT * FROM lid");
+
+//Vraagt leden op met uitgeleende boeken. Wordt gebruikt om de functie GetOpenstaandeBoeteBedragenVanLid uit te voeren maar van te voren uitgevoerd zodat er niet voor elk lid een aparte query hoeft worden uitgevoerd.
+$lening = sqlquery(
+    "SELECT Lid_nr, Boetetarief,Uitleengrondslag,Uitleentijdstip FROM exemplaar 
+			JOIN Lening 
+			WHERE lening.Inleverdatum IS NULL");
 ?>
     <div class="container-fluid">
         <div class="table-responsive">
@@ -184,7 +189,7 @@ $Leden = sqlquery("SELECT * FROM lid");
                         <td><?php echo $Lid["Telefoonnummer"] ?></td>
                         <td><?php echo $Lid["Emailadres"] ?></td>
                         <td><?php echo $Lid["Geboortedatum"] ?></td>
-                        <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($Lid["Lid_nr"]); ?></td>
+                        <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); ?></td>
                         <?php //Verwijst naar het dialoogvenster "Aanpassenlid<Lid_nr>"
                         ?>
                         <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary"
@@ -200,7 +205,7 @@ $Leden = sqlquery("SELECT * FROM lid");
         </div>
         <a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Nieuw lid
             aanmaken</a>
-        <a href="./index.html" class="btn btn-primary">Terug naar de hoofdpagina</a>
+        <a href="OLD/Index.html" class="btn btn-primary">Terug naar de hoofdpagina</a>
     </div>
 <?php /*Maakt het dialoogvenster "Toevoegenlid" aan.
 		Dit dialoogvenster geeft de waarde $_POST[Toevoegen] mee als op de "toevoegen" knop in het dialoogvenster geklikt wordt. 
@@ -209,12 +214,12 @@ $Leden = sqlquery("SELECT * FROM lid");
 		*/
 ?>
 <?php
-$keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in de array $keys
+$keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in de array $keys met behulp van de functie "GetTableKeys"
 ?>
     <div id="Toevoegenlid" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="./leden.php">
+                <form method="post" action="./Leden.php">
                     <div class="modal-header">
                         <h4 class="modal-title">Lid Toevoegen</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -257,7 +262,7 @@ foreach ($Leden as $Lid) :
     <div id="Aanpassenlid<?php echo $Lid['Lid_nr']; ?>" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="./leden.php">
+                <form method="post" action="./Leden.php">
                     <div class="modal-header">
                         <h4 class="modal-title">Aanpassen lid <?php echo $Lid['Lid_nr']; ?></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -266,8 +271,7 @@ foreach ($Leden as $Lid) :
                         <?php
                         foreach ($Lid as $key => $value) :
                             if ($key == 'Lid_nr') {//Lid_nr wordt een hidden field zodat deze niet aanpasbaar is maar wel meegenomen wordt in de $_POST.
-                                ?>        <input type="hidden" class="form-control" name="<?php echo "$key" ?>"
-                                                 value="<?php echo "$value" ?>">
+                                ?>        <input type="hidden" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>">
                                 <?php
                             } else {
                                 ?>
@@ -294,14 +298,11 @@ foreach ($Leden as $Lid) :
 endforeach
 ?>
 
-
 <?php /*Maakt het dialoogvenster "Verwijderenenlid" aan.
-		Dit dialoogvenster geeft de waarde $_POST[Aanpassen] mee als op de "Aanpassen" knop in het dialoogvenster geklikt wordt. 
+		Dit dialoogvenster geeft de waarde $_POST[Aanpassen] mee als op de "Aanpassen" knop in het dialoogvenster geklikt wordt.
 		De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
 		$key wordt als label en naam voor het inputveld gebruikt.
 		*/
-?>
-<?php
 $LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken(); // Dialoogvenster "verwijderlid" wordt anders ingevuld als het lid nog boeken heeft geleend.
 foreach ($Leden as $Lid) :
     ?>
@@ -309,7 +310,7 @@ foreach ($Leden as $Lid) :
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <?php if (in_array($Lid['Lid_nr'], $LedenMetGeleendeBoeken)) { ?>
-                    <form method="post" action="./leden.php">
+                    <form method="post" action="./Leden.php">
                         <div class="modal-header">
                             <h4 class="modal-title">Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je
                                 lid <?php echo $Lid['Lid_nr']; ?> wilt verwijderen?</h4>
@@ -345,7 +346,7 @@ foreach ($Leden as $Lid) :
                         </div>
                     </form>
                 <?php } else { ?>
-                    <form method="post" action="./leden.php">
+                    <form method="post" action="./Leden.php">
                         <div class="modal-header">
                             <h4 class="modal-title"> Weet je zeker dat je lid nummer <?php echo $Lid['Lid_nr']; ?> wilt
                                 verwijderen?</h4>

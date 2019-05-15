@@ -1,6 +1,6 @@
-<?php include "./templates/header.php"; ?>
+<?php include "./templates/Header.php"; ?>
 <?php
-require "./functies/common.php";
+require "./functies/Common.php";
 $Boeken = sqlquery('SELECT count(exemplaar.Boek_nr) AS "aantal exemplaren", boek.ISBN, Boek.Titel, Druk, Seriedeelnr, auteur.voornaam, auteur.achternaam, serie.titel as "titel van serie" FROM boek
 							LEFT JOIN auteur on boek.Auteur_nr = auteur.Auteur_nr
 							left JOIN serie on boek.Serie_nr = serie.Serie_nr
@@ -63,7 +63,7 @@ $Boeken = sqlquery('SELECT count(exemplaar.Boek_nr) AS "aantal exemplaren", boek
     <div id="Details<?php echo $Boek['ISBN']; ?>" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="./boeken.php">
+                <form method="post" action="boeken.php">
                     <div class="modal-header">
                         <h4 class="modal-title">Details van boek: <?php echo $Boek['Titel']; ?></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -88,4 +88,4 @@ $Boeken = sqlquery('SELECT count(exemplaar.Boek_nr) AS "aantal exemplaren", boek
 endforeach;
 ?>
 
-<?php include "./Templates/footer.php"; ?>
+<?php include "./Templates/Footer.php"; ?>
