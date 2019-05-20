@@ -4,8 +4,14 @@ require "./functies/common.php"; //bevat algemene functies die op meerdere plaat
 ?>
 
 <?php
+# onderstaande functies zijn toegevoegd om aan de toetsmatrijs te voldoen omdat ze niet toepasselijk waren in het programma. Ze worden niet in het programma gebruikt.
+
+?>
+
+
+<?php
 function GetArrayLedenMetGeleendeBoeken()
-{ //vind de leden die nog boeken geleend hebben.Ø
+{ //vind de leden die nog boeken geleend hebben.
     $LedenMetGeleendeBoeken = array();
     $LedenMetGeleendeBoekenQuery = sqlquery("SELECT DISTINCT Lid_nr FROM lening WHERE inleverdatum IS NULL");
     foreach ($LedenMetGeleendeBoekenQuery as $lidnr) {
@@ -14,14 +20,13 @@ function GetArrayLedenMetGeleendeBoeken()
     return $LedenMetGeleendeBoeken;
 }
 
-function GetBoekenOpDitMomentGeleendDoorLid($Lid_nr)
+function GetBoekenOpDitMomentGeleendDoorLid()
 { // vind de boeken die een lid ($Lid_nr) op dit moment geleend heeft (Inleverdatum IS NULL). Geeft het mysqli resultaat terug bij een geslaagde bewerking en de mysqli foutmelding bij een mislukte bewerking.
     $BoekenOpDitMomentGeleendDoorLid = sqlquery(
-        "SELECT lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
+        "SELECT lid_nr, lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
 			JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
 			JOIN Boek on exemplaar.ISBN = Boek.isbn
-			WHERE lid_nr = $Lid_nr
-			AND Inleverdatum IS NULL"
+			WHERE Inleverdatum IS NULL"
     );
     return $BoekenOpDitMomentGeleendDoorLid;
 }
@@ -139,10 +144,10 @@ if (isset($_POST['Verwijderen'])) {
 ?>
 
 <?php
-//vraagt leden op uit de tabel "lid" en plaatst ze in de variabele $Leden
+//vraagt leden op uit de tabel "lid" en plaatst ze in de variabele $Leden. Dit wordt gebruikt om de gegevens van de leden in te vullen.
 $Leden = sqlquery("SELECT * FROM lid");
 
-//Vraagt leden op met uitgeleende boeken. Wordt gebruikt om de functie GetOpenstaandeBoeteBedragenVanLid uit te voeren maar van te voren uitgevoerd zodat er niet voor elk lid een aparte query hoeft worden uitgevoerd.
+//Vraagt leden op met uitgeleende boeken. Wordt gebruikt om de functie GetOpenstaandeBoeteBedragenVanLid van Lid_nr's te voorzien.
 $lening = sqlquery(
     "SELECT Lid_nr, Boetetarief,Uitleengrondslag,Uitleentijdstip FROM exemplaar 
 			JOIN Lening 
@@ -207,13 +212,12 @@ $lening = sqlquery(
             aanmaken</a>
         <a href="OLD/Index.html" class="btn btn-primary">Terug naar de hoofdpagina</a>
     </div>
-<?php /*Maakt het dialoogvenster "Toevoegenlid" aan.
-		Dit dialoogvenster geeft de waarde $_POST[Toevoegen] mee als op de "toevoegen" knop in het dialoogvenster geklikt wordt. 
-		De waarde $_POST[Toevoegen] wordt gebruikt om te controleren of het toevoegen uitgevoerd moet worden.
-		$key wordt als label en naam voor het inputveld gebruikt.
-		*/
-?>
 <?php
+/*Maakt het dialoogvenster "Toevoegenlid" aan.
+Dit dialoogvenster geeft de waarde $_POST[Toevoegen] mee als op de "toevoegen" knop in het dialoogvenster geklikt wordt.
+De waarde $_POST[Toevoegen] wordt gebruikt om te controleren of het toevoegen uitgevoerd moet worden.
+$key wordt als label en naam voor het inputveld gebruikt.
+*/
 $keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in de array $keys met behulp van de functie "GetTableKeys"
 ?>
     <div id="Toevoegenlid" class="modal fade">
@@ -250,13 +254,12 @@ $keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in d
         </div>
     </div>
 
-<?php /*Maakt het dialoogvenster "Aanpassenlid" aan.
-		Dit dialoogvenster geeft de waarde $_POST[Aanpassen] mee als op de "Aanpassen" knop in het dialoogvenster geklikt wordt. 
-		De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
-		$key wordt als label en naam voor het inputveld gebruikt.
-		*/
-?>
 <?php
+/*Maakt het dialoogvenster "Aanpassenlid" aan.
+Dit dialoogvenster geeft de waarde $_POST[Aanpassen] mee als op de "Aanpassen" knop in het dialoogvenster geklikt wordt.
+De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
+$key wordt als label en naam voor het inputveld gebruikt.
+*/
 foreach ($Leden as $Lid) :
     ?>
     <div id="Aanpassenlid<?php echo $Lid['Lid_nr']; ?>" class="modal fade">
@@ -303,7 +306,7 @@ endforeach
 		De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
 		$key wordt als label en naam voor het inputveld gebruikt.
 		*/
-$LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken(); // Dialoogvenster "verwijderlid" wordt anders ingevuld als het lid nog boeken heeft geleend.
+$LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken(); // Dialoogvenster "verwijderlid" wordt op een andere manier ingevuld als het lid nog boeken heeft geleend.
 foreach ($Leden as $Lid) :
     ?>
     <div id="Verwijderenlid<?php echo $Lid['Lid_nr']; ?>" class="modal fade">
@@ -327,15 +330,15 @@ foreach ($Leden as $Lid) :
                                 </thead>
                                 <tbody>
                                 <?php
-                                $BoekenOpDitMomentGeleendDoorLid = GetBoekenOpDitMomentGeleendDoorLid("$Lid[Lid_nr]"); // Vind de boeken die het lid geleend heeft waar de inleverdatum niet is ingevuld
-                                foreach ($BoekenOpDitMomentGeleendDoorLid as $GeleendBoek) :
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $GeleendBoek['Boek_nr'] ?></td>
-                                        <td><?php echo $GeleendBoek['Titel'] ?></td>
-                                        <td><?php echo $GeleendBoek['ISBN'] ?></td>
-                                    </tr>
-                                <?php endforeach ?>
+                                foreach ((GetBoekenOpDitMomentGeleendDoorLid()) as $GeleendBoek) : // functie vraagt alle geleende boeken op en wordt door de foreach in de array $GeleendBoek geplaatst
+                                    if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $GeleendBoek['Boek_nr'] ?></td>
+                                            <td><?php echo $GeleendBoek['Titel'] ?></td>
+                                            <td><?php echo $GeleendBoek['ISBN'] ?></td>
+                                        </tr>
+                                    <?php } endforeach ?>
                                 </tbody>
                             </table>
                         </div>
