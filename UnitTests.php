@@ -16,4 +16,9 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $Result = GetOpenstaandeBoeteBedragenVanLid($lening,$Lid_nr);
         $this->assertEquals(17.56, $Result); //verwacht wordt boetetarief * dagen te laat (= $interval, in dit geval 2) dus 8.78 * 2 = 17.56
     }
+    /** @test */
+    public function TestLidToevoegen()// test de boeteberekening door een mysqli regel na te maken waarbij het boek 2 dagen te laat is en deze te voeren aan de functie "GetOpenstaandeBoeteBedragenVanLid".
+    {
+
+    }
 }

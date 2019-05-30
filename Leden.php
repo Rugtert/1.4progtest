@@ -4,7 +4,15 @@ require "./functies/common.php"; //bevat algemene functies die op meerdere plaat
 ?>
 
 <?php
-# onderstaande functies zijn toegevoegd om aan de toetsmatrijs te voldoen omdat ze niet toepasselijk waren in het programma. Ze worden niet in het programma gebruikt.
+# onderstaande functies zijn toegevoegd om aan de toetseisen te voldoen . Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
+
+//Wandelen, A16, UsainBolt
+Function HoeLangDuurtHetOmDeMaanTeBereiken($a, $b) {
+    $AverageMoonDistanceToEarth = "385000"; //Gemiddelde afstand tot de maan in kilometers
+    $AverageHumanWalkingSpeed = "4"; //Gemiddelde wandelsnelheid van een mens in kilometers per uur
+    $AverageHumanRunningSpeed
+
+}
 
 ?>
 
@@ -68,6 +76,7 @@ function LidToevoegen()
 
 function LidAanpassen()
 { // Past een lid aan met de waarden uit $_POST.
+    var_dump($_POST);
     $lid = sqlquery(
         "UPDATE Lid SET 
 			Voornaam = \"$_POST[Voornaam]\", 
