@@ -4,15 +4,52 @@ require "./functies/common.php"; //bevat algemene functies die op meerdere plaat
 ?>
 
 <?php
-# onderstaande functies zijn toegevoegd om aan de toetseisen te voldoen . Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
+# onderstaande functies zijn toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
 
-//Wandelen, A16, UsainBolt
-Function HoeLangDuurtHetOmDeMaanTeBereiken($a, $b) {
+
+Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
+{
+    //Afstanden
+    $MinDistanceToEarth = "363104"; // Minimale afstand tot de maan in kilometers
     $AverageMoonDistanceToEarth = "385000"; //Gemiddelde afstand tot de maan in kilometers
-    $AverageHumanWalkingSpeed = "4"; //Gemiddelde wandelsnelheid van een mens in kilometers per uur
-    $AverageHumanRunningSpeed
+    $MaxDistanceToEarth = "405696"; //maximale afstand tot de maan in kilometers
 
-}
+    //Snelheden
+    $AverageHumanWalkingSpeed = "4"; //Gemiddelde wandelsnelheid van een mens in kilometers per uur
+    $A16MaxSpeed = "130"; //maximun snelheid op de A16 in kilometers per uur
+    $UsainBoltMaxSpeed = "44.72"; // Zo snel rent Usain Bolt in kilometers per uur
+    $Voyager1MaxSpeed = "62140"; // Zo snel gaat Voyager 1 in kilometers per uur
+
+    if (is_double($Snelheid)) {
+        //Berekeningen
+        $MinTime = round(($MinDistanceToEarth / $Snelheid), 2);
+        $AvgTime = $AverageMoonDistanceToEarth / $Snelheid;
+        $MaxTime = $MaxDistanceToEarth / $Snelheid;
+        Return "Tijd om de maan te bereiken als deze het dichst bij staat: $MinTime uur. Tijd om de maan te bereiken als deze het verste weg is: $MaxTime uur. Gemiddelde tijd om de maan te bereiken: $AvgTime uur.";
+    } Else {
+        //Berekeningen
+        $MinTimeAverageWalkingSpeed = $MinDistanceToEarth / $AverageHumanWalkingSpeed;
+        $AvgTimeAverageWalkingSpeed = $AverageMoonDistanceToEarth / $AverageHumanWalkingSpeed;
+        $MaxTimeAverageWalkingSpeed = $MaxDistanceToEarth / $AverageHumanWalkingSpeed;
+
+        $MinTimeA16MaxSpeed = $MinDistanceToEarth / $A16MaxSpeed;
+        $AvgTimeA16MaxSpeed = $AverageMoonDistanceToEarth / $A16MaxSpeed;
+        $MaxTimeA16MaxSpeed = $MaxDistanceToEarth / $A16MaxSpeed;
+
+        $MinTimeUsainBoltMaxSpeed = $MinDistanceToEarth / $UsainBoltMaxSpeed;
+        $AvgTimeUsainBoltMaxSpeed = $AverageMoonDistanceToEarth / $UsainBoltMaxSpeed;
+        $MaxTimeUsainBoltMaxSpeed = $MaxDistanceToEarth / $UsainBoltMaxSpeed;
+
+        $MinTimeVoyager1MaxSpeed = $MinDistanceToEarth / $Voyager1MaxSpeed;
+        $AvgTimeVoyager1MaxSpeed = $AverageMoonDistanceToEarth / $Voyager1MaxSpeed;
+        $MaxTimeVoyager1MaxSpeed = $MaxDistanceToEarth / $Voyager1MaxSpeed;
+
+        Return "Minimale afstand: Wandelend; $MinTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MinTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MinTimeUsainBoltMaxSpeed uur , Als Voyager1 met de huidige snelheid langs zou komen; $MinTimeVoyager1MaxSpeed uur.
+               Gemiddelde afstand: Wandelend; $AvgTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $AvgTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $AvgTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $AvgTimeVoyager1MaxSpeed uur.
+               Maximale afstand: Wandelend; $MaxTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MaxTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MaxTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $MaxTimeVoyager1MaxSpeed uur.
+                ";
+    }
+};
 
 ?>
 
@@ -29,7 +66,7 @@ function GetArrayLedenMetGeleendeBoeken()
 }
 
 function GetBoekenOpDitMomentGeleendDoorLid()
-{ // vind de boeken die een lid ($Lid_nr) op dit moment geleend heeft (Inleverdatum IS NULL). Geeft het mysqli resultaat terug bij een geslaagde bewerking en de mysqli foutmelding bij een mislukte bewerking.
+{ // vind de boeken die een lid op dit moment geleend heeft (Inleverdatum IS NULL). Geeft het mysqli resultaat terug bij een geslaagde bewerking en de mysqli foutmelding bij een mislukte bewerking.
     $BoekenOpDitMomentGeleendDoorLid = sqlquery(
         "SELECT lid_nr, lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
 			JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
@@ -283,7 +320,8 @@ foreach ($Leden as $Lid) :
                         <?php
                         foreach ($Lid as $key => $value) :
                             if ($key == 'Lid_nr') {//Lid_nr wordt een hidden field zodat deze niet aanpasbaar is maar wel meegenomen wordt in de $_POST.
-                                ?>        <input type="hidden" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>">
+                                ?>        <input type="hidden" class="form-control" name="<?php echo "$key" ?>"
+                                                 value="<?php echo "$value" ?>">
                                 <?php
                             } else {
                                 ?>

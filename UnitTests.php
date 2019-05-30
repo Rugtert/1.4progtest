@@ -17,8 +17,9 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $this->assertEquals(17.56, $Result); //verwacht wordt boetetarief * dagen te laat (= $interval, in dit geval 2) dus 8.78 * 2 = 17.56
     }
     /** @test */
-    public function TestLidToevoegen()// test de boeteberekening door een mysqli regel na te maken waarbij het boek 2 dagen te laat is en deze te voeren aan de functie "GetOpenstaandeBoeteBedragenVanLid".
+    public function TestMoonTime()// test de boeteberekening door een mysqli regel na te maken waarbij het boek 2 dagen te laat is en deze te voeren aan de functie "GetOpenstaandeBoeteBedragenVanLid".
     {
-
+        $result = HoeLangDuurtHetOmDeMaanTeBereiken(10.1);
+        $this->assertEquals("Tijd om de maan te bereiken als deze het dichst bij staat: 35950.891089109 uur. Tijd om de maan te bereiken als deze het verste weg is: 40167.920792079 uur. Gemiddelde tijd om de maan te bereiken: 38118.811881188 uur.", $result);
     }
 }
