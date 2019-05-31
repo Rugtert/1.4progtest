@@ -26,7 +26,7 @@
         box-shadow: 0 1px 1px rgba(0,0,0,.05);
 		width: 100%;
 		overflow-x: scroll;
-		max-height: 850px;
+		max-height: 1000px;
     }
 	.table-wrapper {
         background: #fff;

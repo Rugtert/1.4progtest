@@ -24,14 +24,14 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $this->assertEquals("Tijd om de maan te bereiken als deze het dichst bij staat: 35950.89 uur. Tijd om de maan te bereiken als deze het verste weg is: 40167.92 uur. Gemiddelde tijd om de maan te bereiken: 38118.81 uur.", $result);
     }
     /** @test */
-    public function TestReadabilityOfRequiredFiles()
+    public function TestReadabilityOfRequiredFiles() // Test of de bestanden die nodig zijn voor voor de werking van het programma leesbaar zijn
     {
         $this->assertFileIsReadable("./functies/Common.php");
         $this->assertFileIsReadable("./Templates/Header.php");
         $this->assertFileIsReadable("./Templates/Footer.php");
     }
     /** @test */
-    public function TestSQLFunction() // Test de functie sqlquery door een query voor de versie van mysql uit te voeren en te controleren of het resultaat de key "Version_Name" heeft.
+    public function TestSQLFunction() // Test de functie sqlquery door een query voor de versie van mysql uit te voeren (data onafhankelijk) en te controleren of het resultaat de key "Version_Name" heeft.
     {
         $result = sqlquery("SELECT @@VERSION AS Version_Name  ");
         $array = mysqli_fetch_assoc($result); //mysqli_result object omzetten naar een array
