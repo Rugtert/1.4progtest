@@ -6,7 +6,8 @@ require "./functies/common.php"; //bevat algemene functies die op meerdere plaat
 <?php
 # onderstaande functies zijn toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
 
-
+$result = sqlquery("SELECT @@VERSION AS Version_Name  ");
+print_r(mysqli_fetch_assoc($result));
 Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
 {
     //Afstanden
@@ -20,11 +21,11 @@ Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
     $UsainBoltMaxSpeed = "44.72"; // Zo snel rent Usain Bolt in kilometers per uur
     $Voyager1MaxSpeed = "62140"; // Zo snel gaat Voyager 1 in kilometers per uur
 
-    if (is_double($Snelheid)) {
+    if (is_numeric($Snelheid)) {
         //Berekeningen
         $MinTime = round(($MinDistanceToEarth / $Snelheid), 2);
-        $AvgTime = $AverageMoonDistanceToEarth / $Snelheid;
-        $MaxTime = $MaxDistanceToEarth / $Snelheid;
+        $AvgTime = round ($AverageMoonDistanceToEarth / $Snelheid, 2);
+        $MaxTime = round ($MaxDistanceToEarth / $Snelheid, 2);
         Return "Tijd om de maan te bereiken als deze het dichst bij staat: $MinTime uur. Tijd om de maan te bereiken als deze het verste weg is: $MaxTime uur. Gemiddelde tijd om de maan te bereiken: $AvgTime uur.";
     } Else {
         //Berekeningen
@@ -46,8 +47,7 @@ Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
 
         Return "Minimale afstand: Wandelend; $MinTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MinTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MinTimeUsainBoltMaxSpeed uur , Als Voyager1 met de huidige snelheid langs zou komen; $MinTimeVoyager1MaxSpeed uur.
                Gemiddelde afstand: Wandelend; $AvgTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $AvgTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $AvgTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $AvgTimeVoyager1MaxSpeed uur.
-               Maximale afstand: Wandelend; $MaxTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MaxTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MaxTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $MaxTimeVoyager1MaxSpeed uur.
-                ";
+               Maximale afstand: Wandelend; $MaxTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MaxTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MaxTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $MaxTimeVoyager1MaxSpeed uur.";
     }
 };
 
