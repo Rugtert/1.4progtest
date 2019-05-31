@@ -47,7 +47,9 @@ Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
                Gemiddelde afstand: Wandelend; $AvgTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $AvgTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $AvgTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $AvgTimeVoyager1MaxSpeed uur.
                Maximale afstand: Wandelend; $MaxTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MaxTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MaxTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $MaxTimeVoyager1MaxSpeed uur.";
     }
-};
+}
+
+;
 ?>
 
 <?php //functies
@@ -92,8 +94,7 @@ function GetOpenstaandeBoeteBedragenVanLid($lening, $Lid_nr)
             Try {
                 $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
                 $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van
-            }
-            Catch (Exception $e) {
+            } Catch (Exception $e) {
                 echo $e->GetMessage();
                 exit(1);
             }
@@ -205,7 +206,7 @@ $lening = $pdo->query(
 			INNER JOIN Lening ON exemplaar.Boek_nr = lening.Boek_nr
 			WHERE lening.Inleverdatum IS NULL")->fetchAll();
 
-?>
+?>Ø
     <div class="container-fluid">
         <div class="table-responsive">
             <div class="table-title">
