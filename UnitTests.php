@@ -7,7 +7,7 @@ class UnitTests extends PHPUnit\Framework\TestCase
     /** @test */
     public function TestBoeteBerekening()// test de boeteberekening door een mysqli regel na te maken waarbij het boek 2 dagen te laat is en deze te voeren aan de functie "GetOpenstaandeBoeteBedragenVanLid".
     {
-        $lening[1] = array( // Deze array bootst een mysqli resultaat na dat gebruikt wordt in de functie.
+        $lening[0] = array( // Deze array bootst een mysqli resultaat na dat gebruikt wordt in de functie.
             'Lid_nr' => '1',
             'Boetetarief' => '8.78',
             'Uitleengrondslag' => '14',
@@ -17,6 +17,7 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $Result = GetOpenstaandeBoeteBedragenVanLid($lening,$Lid_nr);
         $this->assertEquals(17.56, $Result); //verwacht wordt boetetarief * dagen te laat (= $interval, in dit geval 2) dus 8.78 * 2 = 17.56
     }
+
     /** @test */
     public function TestMoonTime()// Test de functie "HoeLangDuurtHetOmDeMaanTeBereiken".
     {
@@ -37,5 +38,22 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $array = mysqli_fetch_assoc($result); //mysqli_result object omzetten naar een array
         $this->assertArrayHasKey("Version_Name", $array);
 
+    }
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testAdd($a, $b, $expected)
+    {
+        $this->assertEquals($expected, $a + $b);
+    }
+
+    public function additionProvider()
+    {
+        return [
+            [0, 0, 0],
+            [0, 1, 1],
+            [1, 0, 1],
+            [1, 1, 3]
+        ];
     }
 }
