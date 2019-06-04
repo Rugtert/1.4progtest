@@ -207,6 +207,10 @@ $lening = $pdo->query(
                     <div class="col-sm-6">
                         <h2><b>Overzicht leden</b></h2>
                     </div>
+                    <div class="col-sm-6">
+                        <a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Nieuw lid
+                            aanmaken</a>
+                    </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
@@ -255,8 +259,6 @@ $lening = $pdo->query(
                 </tbody>
             </table>
         </div>
-        <a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Nieuw lid
-            aanmaken</a>
     </div>
 <?php
 /*Maakt het dialoogvenster "Toevoegenlid" aan.

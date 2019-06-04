@@ -25,7 +25,7 @@
         }
         .table-responsive {
 
-            padding: 20px 25px;
+            padding: 5px 5px;
             margin: 0px 0px;
             border-radius: 3px;
             box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
