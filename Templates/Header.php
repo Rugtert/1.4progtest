@@ -31,7 +31,7 @@
             box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
             width: 100%;
             overflow-y: scroll;
-            max-height: 94vh;
+            max-height: 98vh;
             margin-bottom: 20px ;
         }
 

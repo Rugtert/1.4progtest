@@ -201,6 +201,7 @@ $lening = $pdo->query(
 
 ?>
     <div class="container-fluid">
+
         <div class="table-responsive">
             <div class="table-title">
                 <div class="row">
@@ -213,16 +214,16 @@ $lening = $pdo->query(
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover">
+            <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>Lid nummer</th>
-                    <th>Naam</th>
-                    <th>Adres</th>
-                    <th>Telefoonnummer</th>
-                    <th>Emailadres</th>
-                    <th>Geboortedatum</th>
-                    <th>Openstaande Boete</th>
+                    <th><input type="text" id="myInput0" onkeyup="LidFilters(0)" placeholder="Lid nummer"></th>
+                    <th><input type="text" id="myInput1" onkeyup="LidFilters(1)" placeholder="Naam"></th>
+                    <th><input type="text" id="myInput2" onkeyup="LidFilters(2)" placeholder="Adres"></th>
+                    <th><input type="text" id="myInput3" onkeyup="LidFilters(3)" placeholder="Telefoonnummer"></th>
+                    <th><input type="text" id="myInput4" onkeyup="LidFilters(4)" placeholder="Emailadres"></th>
+                    <th><input type="text" id="myInput5" onkeyup="LidFilters(5)" placeholder="Geboortedatum"></th>
+                    <th><input type="text" id="myInput6" onkeyup="LidFilters(6)" placeholder="Openstaande boete"></th>
                     <th><?php //aanpasknop ?></th>
                     <th><?php //verwijderknop ?></th>
                 </tr>
@@ -484,5 +485,27 @@ foreach ($Leden as $Lid) :
 <?php
 endforeach
 ?>
+    <script>
+        function LidFilters(col) {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput" + col);
+            filter = input.value.toUpperCase();
+            table = document.getElementById("leden");
+            tr = table.getElementsByTagName("tr");
 
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[col];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 <?php include "./Templates/footer.php"; ?>
