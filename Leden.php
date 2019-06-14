@@ -201,7 +201,6 @@ $lening = $pdo->query(
 
 ?>
     <div class="container-fluid">
-
         <div class="table-responsive">
             <div class="table-title">
                 <div class="row">
@@ -217,15 +216,45 @@ $lening = $pdo->query(
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th><input type="text" id="myInput0" onkeyup="LidFilters(0)" placeholder="Lid nummer"></th>
-                    <th><input type="text" id="myInput1" onkeyup="LidFilters(1)" placeholder="Naam"></th>
-                    <th><input type="text" id="myInput2" onkeyup="LidFilters(2)" placeholder="Adres"></th>
-                    <th><input type="text" id="myInput3" onkeyup="LidFilters(3)" placeholder="Telefoonnummer"></th>
-                    <th><input type="text" id="myInput4" onkeyup="LidFilters(4)" placeholder="Emailadres"></th>
-                    <th><input type="text" id="myInput5" onkeyup="LidFilters(5)" placeholder="Geboortedatum"></th>
-                    <th><input type="text" id="myInput6" onkeyup="LidFilters(6)" placeholder="Openstaande boete"></th>
+                    <?php for ($i = 0; $i <= 8; $i++) {
+                        switch ($i) {
+                            case 0:
+                                $Placeholder = "Lid nummer";
+                                break;
+                            case 1:
+                                $Placeholder = "Naam";
+                                break;
+                            case 2:
+                                $Placeholder = "Adres";
+                                break;
+                            case 3:
+                                $Placeholder = "Telefoonnummer";
+                                break;
+                            case 4:
+                                $Placeholder = "Emailadres";
+                                break;
+                            case 5:
+                                $Placeholder = "Geboortedatum";
+                                break;
+                            case 6:
+                                $Placeholder = "Openstaande boete";
+                                break;
+                            case 7 or 8:
+                                $Placeholder = "";
+                                break;
+
+                        }
+                        echo "<th>$Placeholder</th>";
+                    }
+                    ?>
+                </tr>
+                <tr>
+                <?php for ($i = 0; $i <= 6; $i++) {
+                    echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
+                }?>
                     <th><?php //aanpasknop ?></th>
                     <th><?php //verwijderknop ?></th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -437,7 +466,15 @@ foreach ($Leden as $Lid) :
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-striped table-hover">
+                            <div class="table-responsive">
+                                <div class="table-title">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h2><b>Overzicht Boeken</b></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="leden" class="table table-striped table-hover">
                                 <thead>
                                 <tr>
                                     <th>Boek nummer</th>
@@ -458,6 +495,7 @@ foreach ($Leden as $Lid) :
                                     <?php } endforeach ?>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" name="Lid_nr" Value="<?php echo $Lid['Lid_nr']; ?>">

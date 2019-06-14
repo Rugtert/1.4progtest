@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Leden van de bieb</title>
+    <title>De Bieb</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -31,7 +31,7 @@
             box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
             width: 100%;
             overflow-y: scroll;
-            max-height: 98vh;
+            max-height: 97vh;
             margin-bottom: 20px ;
         }
 
@@ -42,7 +42,7 @@
         }
 
         .table-title {
-            background: #435d7d;
+            background: #2f405f;
             color: #fff;
             padding: 16px 30px;
             margin: 0px 0px 0px;
@@ -82,13 +82,24 @@
         }
         table.table tr th{
             font-size: 15px;
-            background-color: #ebebeb;
+            background-color: #435d7d;
+            color: black;
+            border-color: black;
+            border-width: 1px;
+            padding: 5px 5px;
+            vertical-align: Middle;
+            text-align: center;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
 
         }
-        table.table tr th, table.table tr td {
+        table.table tr td {
             border-color: #e9e9e9;
             padding: 5px 5px;
             vertical-align: Middle;
+            border-top-width: 1px;
+            border-top-color: #435d7d;
             border-right-width: 1px;
             border-right-color: #435d7d;
             border-right-style: solid;
@@ -99,14 +110,6 @@
             border-left-color: #435d7d;
             border-left-style: solid;
 
-        }
-
-        table.table tr th:first-child {
-            width: 100px;
-        }
-
-        table.table tr th:last-child {
-            width: 100px;
         }
 
         table.table-striped tbody tr:nth-of-type(odd) {
@@ -128,8 +131,8 @@
 
         .modal .modal-header, .modal .modal-body, .modal .modal-footer {
             padding: 10px 30px;
-
         }
+
 
         .modal .modal-content {
             border-radius: 3px;
@@ -141,6 +144,7 @@
 
         .modal .modal-title {
             display: inline-block;
+
         }
 
         .modal .form-control {
