@@ -66,6 +66,8 @@
         table.table tr td {
             border-color: #e9e9e9;
             padding: 5px 5px;
+            height: 45px;
+            width: auto;
             vertical-align: Middle;
             border-top-width: 1px;
             border-top-color: #435d7d;
@@ -97,7 +99,7 @@
         }
 
         .modal .modal-lg {
-            max-width: 800px;
+            max-width: 900px;
         }
 
         .modal .modal-header, .modal .modal-body, .modal .modal-footer {
@@ -130,7 +132,7 @@
         }
 
         .modal .btn {
-            border-radius: 2px;
+
             min-width: 100px;
         }
 

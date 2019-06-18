@@ -74,16 +74,14 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                     echo "<th>$Placeholder</th>";
                 }
                 ?>
-                <th><?php //aanpasknop ?></th>
                 <th><?php //Exemplaarknop ?></th>
             </tr>
             <tr>
                 <?php for ($i = 0; $i <= 4; $i++) {
-                    echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"BoekFilters($i)\" placeholder=\"Zoeken...\"></th>";
+                    echo "<th><input type=\"text\" id=\"Input$i\" onkeyup=\"BoekFilters($i)\" placeholder=\"Zoeken...\"></th>";
                 }
                 ?>
                 <th><?php //Exemplaarknop ?></th>
-                <th><?php // ?></th>
             </tr>
             </thead>
             <tbody>
@@ -105,7 +103,6 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                     <td><a href="#Exemplaren<?php echo $Boek["ISBN"]; ?>" class="btn btn-primary"
                            data-toggle="modal"
                            data-target="#Exemplaren<?php echo $Boek["ISBN"]; ?>">Exemplaren</a></td>
-                    <td></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -133,6 +130,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                             <th>Uitleengrondslag</th>
                             <th>Bibliotheek</th>
                             <th>Uitgeverij</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -146,6 +144,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                                 <td><?php echo $Exemplaar['Uitleengrondslag'] ?></td>
                                 <td><?php echo $Exemplaar['Bibliotheek'] ?></td>
                                 <td><?php echo $Exemplaar['Uitgeverij'] ?></td>
+                                <td><a href="Uitlenen.php?Boek_nr=<?php echo $Exemplaar['Boek_nr']?>" class="btn btn-primary">Uitlenen</a></td>
                             </tr>
                         <?php endforeach ?>
                         </tbody>
@@ -162,15 +161,15 @@ Function GetExemplarenByISBN($ISBN, $pdo)
     endforeach
     ?>
     <script>
-        function BoekFilters(col) {
-            // Declare variables
+        function BoekFilters(col) { // Voegt filterfunctionaliteit toe aan de tabel Boeken.
+            // Variabelen
             var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput" + col);
+            input = document.getElementById("Input" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("Boeken");
             tr = table.getElementsByTagName("tr");
 
-            // Loop through all table rows, and hide those who don't match the search query
+            // Controleert of er cellen zijn die de tekenreeks van variabele "filter" bevatten.
             for (i = 0; i < tr.length; i++) {
                 td = tr[i].getElementsByTagName("td")[col];
                 if (td) {

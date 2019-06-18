@@ -2,113 +2,12 @@
 include "./templates/Header.php"; //CSS en HTML Header.
 //require "./functies/.sources/OUD/Common.php"; //bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden. Wordt niet meer gebruikt sinds mysqli vervangen is door PDO
 require "./functies/Common.php"; //bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
+require "./functies/Leden_Functies.php"
 ?>
 
-<?php
-# onderstaande functies zijn toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
-Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
-{
-    //Afstanden
-    $MinDistanceToEarth = "363104"; // Minimale afstand tot de maan in kilometers
-    $AverageMoonDistanceToEarth = "385000"; //Gemiddelde afstand tot de maan in kilometers
-    $MaxDistanceToEarth = "405696"; //maximale afstand tot de maan in kilometers
 
-    //Snelheden
-    $AverageHumanWalkingSpeed = "4"; //Gemiddelde wandelsnelheid van een mens in kilometers per uur
-    $A16MaxSpeed = "130"; //maximun snelheid op de A16 in kilometers per uur
-    $UsainBoltMaxSpeed = "44.72"; // Zo snel rent Usain Bolt in kilometers per uur
-    $Voyager1MaxSpeed = "62140"; // Zo snel gaat Voyager 1 in kilometers per uur
-
-    if (is_numeric($Snelheid)) {
-        //Berekeningen
-        $MinTime = round(($MinDistanceToEarth / $Snelheid), 2);
-        $AvgTime = round($AverageMoonDistanceToEarth / $Snelheid, 2);
-        $MaxTime = round($MaxDistanceToEarth / $Snelheid, 2);
-        Return "Tijd om de maan te bereiken als deze het dichst bij staat: $MinTime uur. Tijd om de maan te bereiken als deze het verste weg is: $MaxTime uur. Gemiddelde tijd om de maan te bereiken: $AvgTime uur.";
-    } Else {
-        //Berekeningen
-        $MinTimeAverageWalkingSpeed = $MinDistanceToEarth / $AverageHumanWalkingSpeed;
-        $AvgTimeAverageWalkingSpeed = $AverageMoonDistanceToEarth / $AverageHumanWalkingSpeed;
-        $MaxTimeAverageWalkingSpeed = $MaxDistanceToEarth / $AverageHumanWalkingSpeed;
-
-        $MinTimeA16MaxSpeed = $MinDistanceToEarth / $A16MaxSpeed;
-        $AvgTimeA16MaxSpeed = $AverageMoonDistanceToEarth / $A16MaxSpeed;
-        $MaxTimeA16MaxSpeed = $MaxDistanceToEarth / $A16MaxSpeed;
-
-        $MinTimeUsainBoltMaxSpeed = $MinDistanceToEarth / $UsainBoltMaxSpeed;
-        $AvgTimeUsainBoltMaxSpeed = $AverageMoonDistanceToEarth / $UsainBoltMaxSpeed;
-        $MaxTimeUsainBoltMaxSpeed = $MaxDistanceToEarth / $UsainBoltMaxSpeed;
-
-        $MinTimeVoyager1MaxSpeed = $MinDistanceToEarth / $Voyager1MaxSpeed;
-        $AvgTimeVoyager1MaxSpeed = $AverageMoonDistanceToEarth / $Voyager1MaxSpeed;
-        $MaxTimeVoyager1MaxSpeed = $MaxDistanceToEarth / $Voyager1MaxSpeed;
-
-        Return "Minimale afstand: Wandelend; $MinTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MinTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MinTimeUsainBoltMaxSpeed uur , Als Voyager1 met de huidige snelheid langs zou komen; $MinTimeVoyager1MaxSpeed uur.
-               Gemiddelde afstand: Wandelend; $AvgTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $AvgTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $AvgTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $AvgTimeVoyager1MaxSpeed uur.
-               Maximale afstand: Wandelend; $MaxTimeAverageWalkingSpeed uur, Als de a16 naar de maan ging; $MaxTimeA16MaxSpeed uur, Als Usain Bolt naar de maan zou rennen; $MaxTimeUsainBoltMaxSpeed uur, Als Voyager1 met de huidige snelheid langs zou komen; $MaxTimeVoyager1MaxSpeed uur.";
-    }
-}
-
-;
-?>
-
-<?php // Functies
-
-function GetArrayLedenMetGeleendeBoeken($pdo)
-{ //vind de leden die nog boeken geleend hebben.
-    $LedenMetGeleendeBoeken = array();
-    $LedenMetGeleendeBoekenQuery = $pdo->query("SELECT DISTINCT Lid_nr FROM lening WHERE inleverdatum IS NULL");
-    foreach ($LedenMetGeleendeBoekenQuery as $lidnr) {
-        array_push($LedenMetGeleendeBoeken, $lidnr['Lid_nr']);
-    };
-    return $LedenMetGeleendeBoeken;
-}
-
-function GetBoekenOpDitMomentGeleendDoorLid($pdo)
-{ // vind de boeken die een lid op dit moment geleend heeft (Inleverdatum IS NULL). Geeft het mysqli resultaat terug bij een geslaagde bewerking en de mysqli foutmelding bij een mislukte bewerking.
-    $BoekenOpDitMomentGeleendDoorLid = $pdo->query(
-        "SELECT lid_nr, lening.Boek_nr,boek.Titel, boek.ISBN FROM lening 
-			JOIN exemplaar on lening.boek_nr = exemplaar.boek_nr
-			JOIN Boek on exemplaar.ISBN = Boek.isbn
-			WHERE Inleverdatum IS NULL"
-    );
-    return $BoekenOpDitMomentGeleendDoorLid;
-}
-
-function GetTableKeys($table, $pdo)
-{//Pakt de kolomnamen van een MySQL table ($table)
-    #global $pdo;
-    $GetTableKeysStatement = $pdo->prepare("DESCRIBE $table");
-    $GetTableKeysStatement->execute();
-    $Keys = $GetTableKeysStatement->fetchall(PDO::FETCH_COLUMN);
-    return $Keys;
-}
-
-function GetOpenstaandeBoeteBedragenVanLid($lening, $Lid_nr)
-{ // Vind de openstaande boetes van een lid en telt ze bij elkaar op. Het eindresultaat ($boetetotaal) is het totaal van de boetes.
-    $boetetotaal = 0;
-    Foreach ($lening as $boete) {
-        if ($boete['Lid_nr'] == $Lid_nr) {
-            Try {
-                $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
-                $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van
-            } Catch (Exception $e) {
-                echo $e->GetMessage();
-                exit(1);
-            }
-            // $boete["uitleengrondslag"] dagen (D))
-            $Today = new DateTime('now'); // Huidige tijdstip om "vandaag" te bepalen
-            $Interval = date_diff($BoeteTellingStart, $Today); // het tijdsverschil tussen de waarden BoeteTellingStart en Today
-
-            $boetetotaal += ($Interval->format("%a") * round($boete["Boetetarief"], 2)); // Multipliceert (*) $interval met $boete["boetetarief"] en telt het resultaat op bij $boetetotaal.
-
-        }
-    };
-    return $boetetotaal;
-}
-
-?>
 <?php //SQL  Prepared Statements
+//Lid aanpassen in de database.
 $LidAanpassenQuery = $pdo->prepare('Update Lid SET 
                Voornaam = :Voornaam, 
                Voorvoegsel = :Voorvoegsel,
@@ -122,6 +21,7 @@ $LidAanpassenQuery = $pdo->prepare('Update Lid SET
                Geboortedatum = :Geboortedatum 
              Where Lid_nr = :Lid_nr');
 
+//Lid toevoegen aan de database.
 $LidToevoegenQuery = $pdo->prepare('INSERT INTO Lid (
                Voornaam, 
                Voorvoegsel,
@@ -146,12 +46,12 @@ $LidToevoegenQuery = $pdo->prepare('INSERT INTO Lid (
                 :Emailadres,
                 :Geboortedatum)');
 
+//Lid verwijderen uit de database.
 $LidVerwijderenQuery = $pdo->prepare('DELETE FROM Lid WHERE Lid_nr = :Lid_nr')
 ?>
 
 <?php // $_POST acties
-if (isset($_POST['Toevoegen'])) {
-    // Voegt een lid toe met de gegevens uit $_POST als $_POST['Toevoegen'] bestaat
+if (isset($_POST['Toevoegen'])) {// Voegt een lid toe met de gegevens uit $_POST als $_POST['Toevoegen'] bestaat.
     $LidToevoegenQuery->execute(array(
         ":Voornaam" => $_POST["Voornaam"],
         ":Voorvoegsel" => $_POST["Voorvoegsel"],
@@ -166,8 +66,7 @@ if (isset($_POST['Toevoegen'])) {
     ));
 }
 
-//Als $_POST['Aanpassen'] ingevuld is wordt code uitgevoerd dat het lid aanpast met de variabelen uit de array $_POST
-if (isset($_POST['Aanpassen'])) {
+if (isset($_POST['Aanpassen'])) {// Als $_POST['Aanpassen'] ingevuld is wordt het lid $_POST['Lid_nr'] aanpast met de variabelen uit de array $_POST
     $LidAanpassenQuery->execute(array(
             ":Voornaam" => $_POST["Voornaam"],
             ":Voorvoegsel" => $_POST["Voorvoegsel"],
@@ -183,8 +82,8 @@ if (isset($_POST['Aanpassen'])) {
     );
 }
 
-//Als $_POST['Verwijderen'] ingevuld is wordt code uitgevoerd dat het lid aanpast met de variabelen uit de array $_POST
-if (isset($_POST['Verwijderen'])) {
+
+if (isset($_POST['Verwijderen'])) {// Als $_POST['Verwijderen'] ingevuld is wordt het lid $_POST['Lid_nr'] verwijderd.
     $LidVerwijderenQuery->execute(array(":Lid_nr" => $_POST["Lid_nr"]));
 }
 ?>
@@ -216,7 +115,7 @@ $lening = $pdo->query(
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <?php for ($i = 0; $i <= 8; $i++) {
+                    <?php for ($i = 0; $i <= 8; $i++) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
                         switch ($i) {
                             case 0:
                                 $Placeholder = "Lid nummer";
@@ -242,16 +141,15 @@ $lening = $pdo->query(
                             case 7 or 8:
                                 $Placeholder = "";
                                 break;
-
                         }
                         echo "<th>$Placeholder</th>";
                     }
                     ?>
                 </tr>
                 <tr>
-                <?php for ($i = 0; $i <= 6; $i++) {
-                    echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
-                }?>
+                    <?php for ($i = 0; $i <= 6; $i++) {
+                        echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
+                    } ?>
                     <th><?php //aanpasknop ?></th>
                     <th><?php //verwijderknop ?></th>
 
@@ -296,7 +194,7 @@ Dit dialoogvenster geeft de waarde $_POST[Toevoegen] mee als op de "toevoegen" k
 De waarde $_POST[Toevoegen] wordt gebruikt om te controleren of het toevoegen uitgevoerd moet worden.
 $key wordt als label en naam voor het inputveld gebruikt.
 */
-$keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid" in de array $keys met behulp van de functie "GetTableKeys"
+$keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid" in de array $keys met behulp van de functie "GetTableKeys".
 ?>
     <div id="Toevoegenlid" class="modal fade">
         <div class="modal-dialog">
@@ -308,51 +206,27 @@ $keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid
                     </div>
                     <div class="modal-body">
                         <?php
-                        foreach ($keys as $key) : //foreach blok dat de velden aanmaakt.
+                        foreach ($keys as $key) : // Formulier aanmaken
                             ?>
                             <div class="form-group">
-                                <?php if ($key == 'Lid_nr') {//Lid nummer is een Auto-Increment waarde in de database en wordt dus niet meegenomen of invulbaar gemaakt.?>
-                                <?php } elseif ($key == "Geboortedatum") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="date" class="form-control" name="<?php echo "$key" ?>">
-                                    </label>
-                                <?php } elseif ($key == "Voorletter") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="text" class="form-control" name="<?php echo "$key" ?>" maxlength="1">
-                                    </label>
-                                <?php } elseif ($key == "Huisnummer") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Number" class="form-control" name="<?php echo "$key" ?>" min="0" max="99999">
-                                    </label>
-                                <?php } elseif ($key == "Postcode") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" maxlength="6">
-                                    </label>
-                                <?php } elseif ($key == "Postcode") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" maxlength="6">
-                                    </label>
-                                <?php } elseif ($key == "Telefoonnummer") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" maxlength="10">
-                                    </label>
-                                <?php } elseif ($key == "Emailadres") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="email" class="form-control" name="<?php echo "$key" ?>" maxlength="255">
-                                    </label>
-                                <?php } else { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="text" class="form-control" name="<?php echo "$key" ?>">
-                                    </label>
-                                <?php } ?>
+                                <?php if ($key == 'Lid_nr') {// Lid nummer is een Auto-Increment waarde in de database en wordt dus niet meegenomen of invulbaar gemaakt.
+                                } elseif ($key == "Geboortedatum") {
+                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\"></label>";
+                                } elseif ($key == "Voorletter") {
+                                    echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" maxlength=\"1\"></label>";
+                                } elseif ($key == "Huisnummer") {
+                                    echo "<label>$key<br><input type=\"Number\" class=\"form - control\" name=\"$key\" min=\"0\" max=\"99999\"></label>";
+                                } elseif ($key == "Postcode") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form - control\" name=\"$key\" maxlength=\"6\"></label>";
+                                } elseif ($key == "Postcode") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form - control\" name=\"$key\" maxlength=\"6\"></label>";
+                                } elseif ($key == "Telefoonnummer") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form - control\" name=\"$key\" maxlength=\"10\"></label>";
+                                } elseif ($key == "Emailadres") {
+                                    echo "<label>$key<br><input type=\"email\" class=\"form - control\" name=\"$key\" maxlength=\"255\"></label>";
+                                } else {
+                                    echo "<label>$key<br><input type=\"text\" class=\"form - control\" name=\"$key\"></label>";
+                                }?>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -369,7 +243,7 @@ $keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid
 /*Maakt het dialoogvenster "Aanpassenlid" aan.
 Dit dialoogvenster geeft de waarde $_POST[Aanpassen] mee als op de "Aanpassen" knop in het dialoogvenster geklikt wordt.
 De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
-$key wordt als label en naam voor het inputveld gebruikt.
+$key wordt als label en naam voor het inputveld gebruikt. $value is de huidige waarde in uit de database.
 */
 foreach ($Leden as $Lid) :
     ?>
@@ -383,55 +257,28 @@ foreach ($Leden as $Lid) :
                     </div>
                     <div class="modal-body">
                         <?php
-                        foreach ($Lid as $key => $value) :
+                        foreach ($Lid as $key => $value) : //Formulier aanmaken
                             ?>
                             <div class="form-group">
-                                <?php if ($key == 'Lid_nr') {//Lid_nr wordt een hidden field zodat deze niet aanpasbaar is maar wel meegenomen wordt in de $_POST.?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" readonly>
-                                    </label>
-                                <?php } elseif ($key == "Geboortedatum") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="date" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>">
-                                    </label>
-                                <?php } elseif ($key == "Voorletter") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" maxlength="1">
-                                    </label>
-                                <?php } elseif ($key == "Huisnummer") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Number" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" min="0" max="99999">
-                                    </label>
-                                <?php } elseif ($key == "Postcode") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" maxlength="6">
-                                    </label>
-                                <?php } elseif ($key == "Postcode") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" maxlength="6">
-                                    </label>
-                                <?php } elseif ($key == "Telefoonnummer") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="Text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" maxlength="10">
-                                    </label>
-                                <?php } elseif ($key == "Emailadres") { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="email" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>" maxlength="255">
-                                    </label>
-                                <?php } else { ?>
-                                    <label>
-                                        <?php echo $key ?>
-                                        <input type="text" class="form-control" name="<?php echo "$key" ?>" value="<?php echo "$value" ?>">
-                                    </label>
-                                <?php } ?>
+                                <?php if ($key == 'Lid_nr') {//Lid_nr wordt een readonly field zodat deze niet aanpasbaar is maar wel meegenomen wordt in de $_POST.
+                                    Echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></label>";
+                                } elseif ($key == "Geboortedatum") {
+                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\" value=\"$value\"></label>";
+                                } elseif ($key == "Voorletter") {
+                                    echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" maxlength=\"1\"></label>";
+                                } elseif ($key == "Huisnummer") {
+                                    echo "<label>$key<br><input type=\"Number\" class=\"form-control\" name=\"$key\" value=\"$value\" min=\"0\" max=\"99999\"></label>";
+                                } elseif ($key == "Postcode") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form-control\" name=\"$key\" value=\"$value\" maxlength=\"6\"></label>";
+                                } elseif ($key == "Postcode") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form-control\" name=\"$key\" value=\"$value\" maxlength=\"6\"></label>";
+                                } elseif ($key == "Telefoonnummer") {
+                                    echo "<label>$key<br><input type=\"Text\" class=\"form-control\" name=\"$key\" value=\"$value\" maxlength=\"10\"></label>";
+                                } elseif ($key == "Emailadres") {
+                                    echo "<label>$key<br><input type=\"email\" class=\"form-control\" name=\"$key\" value=\"$value\" maxlength=\"255\"></label>";
+                                } else {
+                                    echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\"></label>";
+                                } ?>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -452,13 +299,13 @@ endforeach
 		De waarde $_POST[Aanpassen] wordt gebruikt om te controleren of het Aanpassen uitgevoerd moet worden.
 		$key wordt als label en naam voor het inputveld gebruikt.
 		*/
-$LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken($pdo); // Dialoogvenster "verwijderlid" wordt op een andere manier ingevuld als het lid nog boeken heeft geleend.
+$LedenMetGeleendeBoeken = GetArrayLedenMetGeleendeBoeken($pdo); // Controleert of een lid nog boeken heeft geleend
 foreach ($Leden as $Lid) :
     ?>
     <div id="Verwijderenlid<?php echo $Lid['Lid_nr']; ?>" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <?php if (in_array($Lid['Lid_nr'], $LedenMetGeleendeBoeken)) { ?>
+                <?php if (in_array($Lid['Lid_nr'], $LedenMetGeleendeBoeken)) { // Formulier wordt anders ingevuld als het lid nog boeken heeft geleend.?>
                     <form method="post" action="Leden.php">
                         <div class="modal-header">
                             <h4 class="modal-title">Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je
@@ -475,26 +322,25 @@ foreach ($Leden as $Lid) :
                                     </div>
                                 </div>
                                 <table id="leden" class="table table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Boek nummer</th>
-                                    <th>Titel</th>
-                                    <th>ISBN</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                foreach ((GetBoekenOpDitMomentGeleendDoorLid($pdo)) as $GeleendBoek) : // functie vraagt alle geleende boeken op en wordt door de foreach in de array $GeleendBoek geplaatst
-                                    if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $GeleendBoek['Boek_nr'] ?></td>
-                                            <td><?php echo $GeleendBoek['Titel'] ?></td>
-                                            <td><?php echo $GeleendBoek['ISBN'] ?></td>
-                                        </tr>
-                                    <?php } endforeach ?>
-                                </tbody>
-                            </table>
+                                    <thead>
+                                    <tr>
+                                        <th>Boek nummer</th>
+                                        <th>Titel</th>
+                                        <th>ISBN</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    foreach ((GetBoekenOpDitMomentGeleend($pdo)) as $GeleendBoek) : // Geleende boeken in tabel plaatsen
+                                        if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].?>
+                                            <tr>
+                                                <td><?php echo $GeleendBoek['Boek_nr'] ?></td>
+                                                <td><?php echo $GeleendBoek['Titel'] ?></td>
+                                                <td><?php echo $GeleendBoek['ISBN'] ?></td>
+                                            </tr>
+                                        <?php } endforeach ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -525,14 +371,14 @@ endforeach
 ?>
     <script>
         function LidFilters(col) {
-            // Declare variables
+            // Variabelen
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("myInput" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("leden");
             tr = table.getElementsByTagName("tr");
 
-            // Loop through all table rows, and hide those who don't match the search query
+            // Controleert of er cellen zijn die de tekenreeks van variabele "filter" bevatten.
             for (i = 0; i < tr.length; i++) {
                 td = tr[i].getElementsByTagName("td")[col];
                 if (td) {

@@ -375,7 +375,7 @@ foreach ($Leden as $Lid) :
                                 </thead>
                                 <tbody>
                                 <?php
-                                foreach ((GetBoekenOpDitMomentGeleendDoorLid()) as $GeleendBoek) : // functie vraagt alle geleende boeken op en wordt door de foreach in de array $GeleendBoek geplaatst
+                                foreach ((GetBoekenOpDitMomentGeleend()) as $GeleendBoek) : // functie vraagt alle geleende boeken op en wordt door de foreach in de array $GeleendBoek geplaatst
                                     if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].
                                         ?>
                                         <tr>
