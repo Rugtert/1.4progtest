@@ -18,28 +18,25 @@
         }
 
         .container-fluid{
-            padding-left: 0px;
-            padding-right: 0px;
+            padding-left: 0;
+            padding-right: 0;
         }
-        .table-responsive {
-            width: 100%;
+        .table {
+
             max-height: 100%;
             overflow-x: auto;
         }
 
         .table-title {
+            width: 100%;
             background: #2f405f;
             color: #fff;
             padding: 16px 30px;
         }
 
         .table-title h2 {
-            margin: 0px;
+            margin: 0;
             font-size: 24px;
-        }
-
-        .table-title .btn-group {
-            float: right;
         }
 
         .table-title .btn {

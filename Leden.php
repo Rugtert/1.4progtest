@@ -1,14 +1,14 @@
 <?php
 include "./templates/Header.php"; //CSS en HTML Header.
-//require "./functies/.sources/OUD/Common.php"; //bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden. Wordt niet meer gebruikt sinds mysqli vervangen is door PDO
-require "./functies/Common.php"; //bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
-require "./functies/Leden_Functies.php"
+require "./functies/Common.php"; // Bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
+require "./functies/Leden_Functies.php" // Bevat functies specifiek voor deze pagina
 ?>
 
 
 <?php //SQL  Prepared Statements
+
 //Lid aanpassen in de database.
-$LidAanpassenQuery = $pdo->prepare('Update Lid SET 
+$LidAanpassenQuery = $pdo->prepare("Update Lid SET 
                Voornaam = :Voornaam, 
                Voorvoegsel = :Voorvoegsel,
                Achternaam = :Achternaam,
@@ -19,7 +19,7 @@ $LidAanpassenQuery = $pdo->prepare('Update Lid SET
                Telefoonnummer = :Telefoonnummer,
                Emailadres = :Emailadres,
                Geboortedatum = :Geboortedatum 
-             Where Lid_nr = :Lid_nr');
+             Where Lid_nr = :Lid_nr");
 
 //Lid toevoegen aan de database.
 $LidToevoegenQuery = $pdo->prepare('INSERT INTO Lid (
@@ -100,7 +100,7 @@ $lening = $pdo->query(
 
 ?>
     <div class="container-fluid">
-        <div class="table-responsive">
+        <div class="table">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
@@ -226,7 +226,7 @@ $keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid
                                     echo "<label>$key<br><input type=\"email\" class=\"form - control\" name=\"$key\" maxlength=\"255\"></label>";
                                 } else {
                                     echo "<label>$key<br><input type=\"text\" class=\"form - control\" name=\"$key\"></label>";
-                                }?>
+                                } ?>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -305,11 +305,10 @@ foreach ($Leden as $Lid) :
     <div id="Verwijderenlid<?php echo $Lid['Lid_nr']; ?>" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <?php if (in_array($Lid['Lid_nr'], $LedenMetGeleendeBoeken)) { // Formulier wordt anders ingevuld als het lid nog boeken heeft geleend.?>
+                <?php if (in_array($Lid['Lid_nr'], $LedenMetGeleendeBoeken)) { // Formulier wordt met een alternatieve titel en een tabel gemaakt als het Lid_nr voorkomt in $LedenMetGeleendeBoeken.?>
                     <form method="post" action="Leden.php">
                         <div class="modal-header">
-                            <h4 class="modal-title">Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je
-                                lid <?php echo $Lid['Lid_nr']; ?> wilt verwijderen?</h4>
+                            <h4 class="modal-title">Het lid heeft onderstaande boeken nog geleend! Weet je zeker dat je lid <?php echo $Lid['Lid_nr']; ?> wilt verwijderen?</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">
@@ -352,8 +351,7 @@ foreach ($Leden as $Lid) :
                 <?php } else { ?>
                     <form method="post" action="Leden.php">
                         <div class="modal-header">
-                            <h4 class="modal-title"> Weet je zeker dat je lid nummer <?php echo $Lid['Lid_nr']; ?> wilt
-                                verwijderen?</h4>
+                            <h4 class="modal-title"> Weet je zeker dat je lid nummer <?php echo $Lid['Lid_nr']; ?> wilt verwijderen?</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-footer">
