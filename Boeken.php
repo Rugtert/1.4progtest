@@ -5,15 +5,6 @@ include "./templates/Header.php"; //CSS en HTML Header.
 
 <div class="container-fluid">
     <div class="table-responsive">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h2><b>Overzicht boeken</b></h2>
-                </div>
-                <div class="col-sm-6">
-                </div>
-            </div>
-        </div>
         <table id="Boeken" class="table table-striped table-hover">
             <thead>
             <tr>

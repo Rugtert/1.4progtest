@@ -14,37 +14,18 @@
             color: #566787;
             background-color: rgba(67, 93, 125, 0.25);
             font-family: 'Varela Round', sans-serif;
-            font-size: 13px;
         }
-
+        .btn {
+            font-size: 12px;
+        }
         .container-fluid{
             padding-left: 0;
             padding-right: 0;
         }
         .table {
-
             max-height: 100%;
             overflow-x: auto;
         }
-
-        .table-title {
-            width: 100%;
-            background: #2f405f;
-            color: #fff;
-            padding: 16px 30px;
-        }
-
-        .table-title h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .table-title .btn {
-            color: #fff;
-            float: right;
-            font-size: 14px;
-        }
-
 
         table.table tr th{
             font-size: 15px;
@@ -62,6 +43,7 @@
         }
         table.table tr td {
             border-color: #e9e9e9;
+            font-size: 12px;
             padding: 5px 5px;
             height: 45px;
             width: auto;

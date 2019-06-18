@@ -101,21 +101,13 @@ $lening = $pdo->query(
 ?>
     <div class="container-fluid">
         <div class="table">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h2><b>Overzicht leden</b></h2>
-                    </div>
-                    <div class="col-sm-6">
-                        <a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Nieuw lid
-                            aanmaken</a>
-                    </div>
-                </div>
-            </div>
+
+
+
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <?php for ($i = 0; $i <= 8; $i++) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
+                    <?php for ($i = 0; $i <= 7; $i++) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
                         switch ($i) {
                             case 0:
                                 $Placeholder = "Lid nummer";
@@ -138,19 +130,20 @@ $lening = $pdo->query(
                             case 6:
                                 $Placeholder = "Openstaande boete";
                                 break;
-                            case 7 or 8:
+                            case 7:
                                 $Placeholder = "";
                                 break;
                         }
                         echo "<th>$Placeholder</th>";
                     }
                     ?>
+                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Aanmaken</a></th>
                 </tr>
                 <tr>
                     <?php for ($i = 0; $i <= 6; $i++) {
                         echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
                     } ?>
-                    <th><?php //aanpasknop ?></th>
+                    <th></th>
                     <th><?php //verwijderknop ?></th>
 
                 </tr>
