@@ -1,5 +1,6 @@
 <?php
-Include 'Leden.php';
+include './functies/Common.php';
+Include './functies/Leden_Functies.php';
 
 
 class UnitTests extends PHPUnit\Framework\TestCase
@@ -33,6 +34,7 @@ class UnitTests extends PHPUnit\Framework\TestCase
             [100000, 14, 0],
             [1000000000, 16, 2000000000],
             [8.78, 56, 368.76],
+            [8.78, 56, 368] // Geeft een fout
         ];
     }
     /** @test */

@@ -101,9 +101,6 @@ $lening = $pdo->query(
 ?>
     <div class="container-fluid">
         <div class="table">
-
-
-
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
@@ -137,7 +134,7 @@ $lening = $pdo->query(
                         echo "<th>$Placeholder</th>";
                     }
                     ?>
-                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid">Aanmaken</a></th>
+                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid" style="display: block" >Aanmaken</a></th>
                 </tr>
                 <tr>
                     <?php for ($i = 0; $i <= 6; $i++) {
@@ -145,7 +142,6 @@ $lening = $pdo->query(
                     } ?>
                     <th></th>
                     <th><?php //verwijderknop ?></th>
-
                 </tr>
                 </thead>
                 <tbody>
@@ -169,10 +165,10 @@ $lening = $pdo->query(
                         <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); ?></td>
                         <?php //Verwijst naar het dialoogvenster "Aanpassenlid<Lid_nr>"
                         ?>
-                        <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary"
+                        <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary" style="display: block"
                                data-toggle="modal"
                                data-target="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>">Aanpassen</a></td>
-                        <td><a href="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-danger"
+                        <td><a href="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-danger" style="display: block"
                                data-toggle="modal" data-target="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>">Verwijderen</a>
                         </td>
                     </tr>

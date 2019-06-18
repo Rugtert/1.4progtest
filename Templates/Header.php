@@ -18,6 +18,7 @@
         .btn {
             font-size: 12px;
         }
+
         .container-fluid{
             padding-left: 0;
             padding-right: 0;
