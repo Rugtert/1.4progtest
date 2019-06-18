@@ -8,49 +8,33 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style type="text/css">
         body {
             color: #566787;
-            background-color: rgba(67, 93, 125, 0.25);;
+            background-color: rgba(67, 93, 125, 0.25);
             font-family: 'Varela Round', sans-serif;
             font-size: 13px;
         }
-        .container-fluid{
-            margin: 0px;
-            padding: 0px 0px;
 
+        .container-fluid{
+            padding-left: 0px;
+            padding-right: 0px;
         }
         .table-responsive {
-
-            padding: 5px 5px;
-            margin: 0px 0px;
-            border-radius: 3px;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
             width: 100%;
-            overflow-y: scroll;
-            max-height: 97vh;
-            margin-bottom: 20px ;
-        }
-
-        .table-wrapper {
-            background: #fff;
-            padding: 20px 25px;
-            margin: 30px 0;
+            max-height: 100%;
+            overflow-x: auto;
         }
 
         .table-title {
             background: #2f405f;
             color: #fff;
             padding: 16px 30px;
-            margin: 0px 0px 0px;
-            border-radius: 3px 3px 0 0;
         }
 
         .table-title h2 {
-            margin: 0px 0 0;
+            margin: 0px;
             font-size: 24px;
         }
 
@@ -61,29 +45,14 @@
         .table-title .btn {
             color: #fff;
             float: right;
-            font-size: 13px;
-            border: none;
-            min-width: 50px;
-            border-radius: 2px;
-            border: none;
-            outline: none !important;
-
+            font-size: 14px;
         }
 
-        .table-title .btn i {
-            float: left;
-            font-size: 21px;
 
-        }
-
-        .table-title .btn span {
-            float: left;
-
-        }
         table.table tr th{
             font-size: 15px;
             background-color: #435d7d;
-            color: black;
+            color: white;
             border-color: black;
             border-width: 1px;
             padding: 5px 5px;
@@ -113,11 +82,13 @@
         }
 
         table.table-striped tbody tr:nth-of-type(odd) {
-            background: #ebebeb;
+            background: rgba(249, 249, 249, 0.70);
         }
-
+        table.table-striped tbody tr:nth-of-type(even) {
+            background: rgba(249, 249, 249, 0.26);
+        }
         table.table-striped.table-hover tbody tr:hover {
-            background: #ebebeb;
+            background: #e6e6e6;
         }
 
         /* Modal styles */
@@ -170,3 +141,14 @@
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <img src="./Templates/debieb.png" width="35" height="30" class="d-inline-block align-top" alt="">
+        De Bieb</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="./leden.php">Leden</a>
+            <a class="nav-item nav-link" href="./boeken.php">Boeken</a>
+        </div>
+    </div>
+</nav>

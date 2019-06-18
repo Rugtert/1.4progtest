@@ -50,7 +50,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                 </div>
             </div>
         </div>
-        <table id="leden" class="table table-striped table-hover">
+        <table id="Boeken" class="table table-striped table-hover">
             <thead>
             <tr>
                 <?php for ($i = 0; $i <= 4; $i++) {
@@ -79,7 +79,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
             </tr>
             <tr>
                 <?php for ($i = 0; $i <= 4; $i++) {
-                    echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
+                    echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"BoekFilters($i)\" placeholder=\"Zoeken...\"></th>";
                 }
                 ?>
                 <th><?php //Exemplaarknop ?></th>
@@ -115,7 +115,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
 
 <?php foreach ($Boeken as $Boek) : ?>
 <div id="Exemplaren<?php echo $Boek['ISBN']; ?>" class="modal fade">
-    <div class="modal-dialog-lg">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Exemplaren van boek <?php echo $Boek["Titel"]; ?></h2>
@@ -152,7 +152,7 @@ Function GetExemplarenByISBN($ISBN, $pdo)
                     </table>
                 </div>
                 <div class="modal-footer">
-                <input type="button" class="btn btn-primary" data-dismiss="modal" value="Sluiten">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="Annuleren">
                 </div>
             </div>
         </div>
@@ -161,4 +161,27 @@ Function GetExemplarenByISBN($ISBN, $pdo)
     <?php
     endforeach
     ?>
-    }
+    <script>
+        function BoekFilters(col) {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput" + col);
+            filter = input.value.toUpperCase();
+            table = document.getElementById("Boeken");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[col];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+<?php include "./Templates/footer.php"; ?>
