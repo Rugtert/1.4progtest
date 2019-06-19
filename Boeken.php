@@ -116,7 +116,7 @@ include "./templates/Header.php"; //CSS en HTML Header.
     <script>
         function BoekFilters(col) { // Voegt filterfunctionaliteit toe aan de tabel Boeken.
             // Variabelen
-            var input, filter, table, tr, td, i, txtValue;
+            let input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("Input" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("Boeken");

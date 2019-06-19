@@ -1,4 +1,5 @@
 <?php
+require_once "./functies/Common.php";
 # onderstaande functie is toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
 Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
 {

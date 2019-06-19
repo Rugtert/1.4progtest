@@ -141,8 +141,16 @@ function GetOpenstaandeBoeteBedragenVanLid($lening, $Lid_nr)
     $boetetotaal = 0;
     Foreach ($lening as $boete) {
         if ($boete['Lid_nr'] == $Lid_nr) {
-            $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
-            $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van
+            try {
+                $BoeteTellingStart = new DateTime($boete["Uitleentijdstip"]); // maakt een datetime object aan met de waarde van $boete["uitleentijdstip"]
+            } catch (Exception $e) {
+                echo "Something went wrong... $e";
+            }
+            try {
+                $BoeteTellingStart->add(new DateInterval("P" . $boete["Uitleengrondslag"] . "D")); //Voegt de uitleengrondslag ($boete["uitleengrondslag"]) toe aan het datetime object "$BoeteTellingStart". Interval met een periode (P) van
+            } catch (Exception $e) {
+                echo "Something went wrong... $e";
+            }
             // $boete["uitleengrondslag"] dagen (D))
             $Today = new DateTime('now'); // Huidige tijdstip om "vandaag" te bepalen
             $Interval = date_diff($BoeteTellingStart, $Today); // het tijdsverschil tussen de waarden BoeteTellingStart en Today
@@ -283,9 +291,10 @@ $keys = GetTableKeys("Lid"); // Zet de kolomnamen (keys) van de tabel "Lid" in d
                                     <?php if ($key == "Geboortedatum") { ?> <label><?php echo $key ?> (Jaar-Maand-Dag,
                                         bijv; 1989-12-31)</label>
                                     <?php } else { ?>
-                                        <label><?php echo $key ?> </label>
+                                        <label><?php echo $key ?>
                                     <?php } ?>
                                     <input type="text" name="<?php echo $key ?>" class="form-control">
+                                        </label>
                                 </div>
                             <?php } endforeach ?>
                     </div>

@@ -50,6 +50,5 @@ class UnitTests extends PHPUnit\Framework\TestCase
         $result = sqlquery("SELECT @@VERSION AS Version_Name  ");
         $array = mysqli_fetch_assoc($result); //mysqli_result object omzetten naar een array
         $this->assertArrayHasKey("Version_Name", $array);
-
     }
 }

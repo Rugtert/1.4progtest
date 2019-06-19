@@ -108,7 +108,7 @@
         }
 
         .modal .form-group {
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
 
         .modal .btn {
@@ -129,8 +129,8 @@
         De Bieb</a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" href="./leden.php">Leden</a>
-            <a class="nav-item nav-link" href="./boeken.php">Boeken</a>
+            <a class="nav-item nav-link" href="./Leden.php">Leden</a>
+            <a class="nav-item nav-link" href="./Boeken.php">Boeken</a>
         </div>
     </div>
 </nav>

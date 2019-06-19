@@ -359,7 +359,7 @@ endforeach
     <script>
         function LidFilters(col) {
             // Variabelen
-            var input, filter, table, tr, td, i, txtValue;
+            let input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("myInput" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("leden");

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 // Definieëren van verbindingsparameters als constants.
 define("host", "localhost");
 define("username", "root");
