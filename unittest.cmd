@@ -1,0 +1,1 @@
+C:\xampp\php\php.exe C:\xampp\htdocs\1.4progtest\phpunit.phar --no-configuration UnitTests C:\xampp\htdocs\1.4progtest\UnitTests.php --testdox

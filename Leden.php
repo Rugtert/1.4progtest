@@ -104,8 +104,8 @@ $lening = $pdo->query(
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <?php for ($i = 0; $i <= 7; $i++) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
-                        switch ($i) {
+                    <?php for ($i = 0; $i <= 7; $i++) { //9 kolommen waarvan 1 buiten dit blok == 8 headers
+                        switch ($i) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
                             case 0:
                                 $Placeholder = "Lid nummer";
                                 break;
@@ -134,14 +134,14 @@ $lening = $pdo->query(
                         echo "<th>$Placeholder</th>";
                     }
                     ?>
-                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid" style="display: block" >Aanmaken</a></th>
+                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid" style="display: block" >Aanmaken</a></th> <!-- 9de header -->
                 </tr>
                 <tr>
-                    <?php for ($i = 0; $i <= 6; $i++) {
+                    <?php for ($i = 0; $i <= 6; $i++) {// 7 zoekveldjes
                         echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
                     } ?>
-                    <th></th>
-                    <th><?php //verwijderknop ?></th>
+                    <th><!--aanpasknop--></th>
+                    <th><!-- verwijderknop --></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -151,10 +151,10 @@ $lening = $pdo->query(
                     <tr>
                         <td><?php echo $Lid["Lid_nr"]; ?></td>
                         <td><?php
-                            if (!empty($Lid["Voorvoegsel"])) {
+                            if (!empty($Lid["Voorvoegsel"])) { // Als $Lid["Voorvoegsel"] niet leeg is wordt de naam incl voorvoegsel ingevuld
                                 echo $Lid["Voornaam"] . " " . $Lid["Voorvoegsel"] . " " . $Lid["Achternaam"];
                             } else {
-                                echo $Lid["Voornaam"] . " " . $Lid["Achternaam"];
+                                echo $Lid["Voornaam"] . " " . $Lid["Achternaam"]; // En anders niet.
                             }
                             ?>
                         </td>
@@ -165,12 +165,10 @@ $lening = $pdo->query(
                         <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); ?></td>
                         <?php //Verwijst naar het dialoogvenster "Aanpassenlid<Lid_nr>"
                         ?>
-                        <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary" style="display: block"
-                               data-toggle="modal"
-                               data-target="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>">Aanpassen</a></td>
-                        <td><a href="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-danger" style="display: block"
-                               data-toggle="modal" data-target="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>">Verwijderen</a>
-                        </td>
+                        <!-- Aanpasknop, verwijst naar div id Aanpassenlid$Lid["Lid_nr"] -->
+                        <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary" style="display: block" data-toggle="modal" data-target="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>">Aanpassen</a></td>
+                        <!-- Verwijderknop, verwijst naar div id Verwijderenlid$Lid["Lid_nr"] -->
+                        <td><a href="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-danger" style="display: block" data-toggle="modal" data-target="#Verwijderenlid<?php echo $Lid["Lid_nr"]; ?>">Verwijderen</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -200,7 +198,7 @@ $keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid
                             <div class="form-group">
                                 <?php if ($key == 'Lid_nr') {// Lid nummer is een Auto-Increment waarde in de database en wordt dus niet meegenomen of invulbaar gemaakt.
                                 } elseif ($key == "Geboortedatum") {
-                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\"></label>";
+                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\"></label>";//label en invoerveld.
                                 } elseif ($key == "Voorletter") {
                                     echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" maxlength=\"1\"></label>";
                                 } elseif ($key == "Huisnummer") {
@@ -249,8 +247,8 @@ foreach ($Leden as $Lid) :
                         foreach ($Lid as $key => $value) : //Formulier aanmaken
                             ?>
                             <div class="form-group">
-                                <?php if ($key == 'Lid_nr') {//Lid_nr wordt een readonly field zodat deze niet aanpasbaar is maar wel meegenomen wordt in de $_POST.
-                                    Echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></label>";
+                                <?php if ($key == 'Lid_nr') {//Lid_nr wordt een readonly field zodat deze niet aanpasbaar is maar wel meegenomen wordt in $_POST.
+                                    Echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></label>"; //label en invoerveld.
                                 } elseif ($key == "Geboortedatum") {
                                     echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\" value=\"$value\"></label>";
                                 } elseif ($key == "Voorletter") {
@@ -320,7 +318,7 @@ foreach ($Leden as $Lid) :
                                     <tbody>
                                     <?php
                                     foreach ((GetBoekenOpDitMomentGeleend($pdo)) as $GeleendBoek) : // Geleende boeken in tabel plaatsen
-                                        if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].?>
+                                        if ($GeleendBoek["lid_nr"] == $Lid["Lid_nr"]) { // Voert alleen onderstaande regels uit als de huidige rij van de array $Geleendboek een lidnummer bevat dat matcht met $Lid['Lid_nr'].?>
                                             <tr>
                                                 <td><?php echo $GeleendBoek['Boek_nr'] ?></td>
                                                 <td><?php echo $GeleendBoek['Titel'] ?></td>
