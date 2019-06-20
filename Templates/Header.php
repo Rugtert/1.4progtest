@@ -23,6 +23,14 @@
             padding-left: 0;
             padding-right: 0;
         }
+
+        .card {
+            height: 400px;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            float: none;
+            width: 400px;
+        }
         .table {
             max-height: 100%;
             overflow-x: auto;

@@ -133,8 +133,6 @@ $lening = $pdo->query(
                         <td><?php echo $Lid["Emailadres"] ?></td>
                         <td><?php echo $Lid["Geboortedatum"] ?></td>
                         <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); ?></td>
-                        <?php //Verwijst naar het dialoogvenster "Aanpassenlid<Lid_nr>"
-                        ?>
                         <!-- Aanpasknop, verwijst naar div id Aanpassenlid$Lid["Lid_nr"] -->
                         <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary" style="display: block" data-toggle="modal" data-target="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>">Aanpassen</a></td>
                         <!-- Verwijderknop, verwijst naar div id Verwijderenlid$Lid["Lid_nr"] -->
