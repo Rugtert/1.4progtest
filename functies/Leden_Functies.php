@@ -92,9 +92,10 @@ function GetOpenstaandeBoeteBedragenVanLid($lening, $Lid_nr)
             // $boete["uitleengrondslag"] dagen (D))
             $Today = new DateTime('now'); // Huidige tijdstip om "vandaag" te bepalen
             $Interval = date_diff($BoeteTellingStart, $Today); // het tijdsverschil tussen de waarden BoeteTellingStart en Today
-
-            $boetetotaal += ($Interval->format("%a") * round($boete["Boetetarief"], 2)); // Multipliceert (*) $interval met $boete["boetetarief"] en telt het resultaat op bij $boetetotaal.
-
+            If (!$Interval->format("%r"))
+            {// Wordt alleen uitgevoerd als $Interval positief is. Gecontroleerd door $Interval->format("%r) waarbij %r een - wordt als de waarde negatief is en leeg is als deze positief is.
+                $boetetotaal += ($Interval->format("%a") * round($boete["Boetetarief"], 2)); // Multipliceert (*) $interval met $boete["boetetarief"] en telt het resultaat op bij $boetetotaal.
+            }
         }
     };
     return $boetetotaal;

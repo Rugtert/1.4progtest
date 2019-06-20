@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 // Definieëren van verbindingsparameters als constanten.
 define("host", "localhost");
 define("username", "root");
@@ -17,6 +17,16 @@ try {
 } catch (PDOException $e) {
     throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
+
+function TableHeaderWriter(array $HeaderNames)
+{// Neemt een array en geeft voor elke waarde in de array <th>waarde</th> terug op een nieuwe regel (\n)
+    $return = array();
+    for ($i = 0; $i < count($HeaderNames); $i++) {
+        array_push($return, "<th>$HeaderNames[$i]</th>");
+    }
+    return implode("\n", $return);
+}
+
 function sqlquery($query)
 {// Voert een sqlquery uit op de database. Dit staat hier alleen nog voor de mysql unittest "TestSQLFunction".
 

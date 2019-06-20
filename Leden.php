@@ -1,7 +1,7 @@
 <?php
-include "./templates/Header.php"; //CSS en HTML Header.
-require "./functies/Common.php"; // Bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
-require "./functies/Leden_Functies.php" // Bevat functies specifiek voor deze pagina
+include_once "./templates/Header.php"; //CSS en HTML Header.
+require_once "./functies/Common.php"; // Bevat algemene functies die op meerdere plaatsen gebruikt kunnen worden.
+require_once "./functies/Leden_Functies.php" // Bevat functies specifiek voor deze pagina
 ?>
 
 
@@ -104,44 +104,14 @@ $lening = $pdo->query(
             <table id="leden" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <?php for ($i = 0; $i <= 7; $i++) { //9 kolommen waarvan 1 buiten dit blok == 8 headers
-                        switch ($i) {// Switch bepaald aan de hand van de iteratie van de loop wat de inhoud van de header is.
-                            case 0:
-                                $Placeholder = "Lid nummer";
-                                break;
-                            case 1:
-                                $Placeholder = "Naam";
-                                break;
-                            case 2:
-                                $Placeholder = "Adres";
-                                break;
-                            case 3:
-                                $Placeholder = "Telefoonnummer";
-                                break;
-                            case 4:
-                                $Placeholder = "Emailadres";
-                                break;
-                            case 5:
-                                $Placeholder = "Geboortedatum";
-                                break;
-                            case 6:
-                                $Placeholder = "Openstaande boete";
-                                break;
-                            case 7:
-                                $Placeholder = "";
-                                break;
-                        }
-                        echo "<th>$Placeholder</th>";
-                    }
-                    ?>
-                    <th><a href="#Toevoegenlid" class="btn btn-success" data-toggle="modal" data-target="#Toevoegenlid" style="display: block" >Aanmaken</a></th> <!-- 9de header -->
+                    <!--Header maken met de functie TableHeaderWriter (zie /fucnties/Leden_Functies.php)-->
+                    <?php echo TableHeaderWriter(array("Lid Nummer","Naam","Adres","Telefoonnummer","Emailadres","Geboortedatum","Openstaande boete","","<a href=\"#Toevoegenlid\" class=\"btn btn-success\" data-toggle=\"modal\" data-target=\"#Toevoegenlid\" style=\"display: block\" >Aanmaken</a>"));?>
                 </tr>
                 <tr>
-                    <?php for ($i = 0; $i <= 6; $i++) {// 7 zoekveldjes
-                        echo "<th><input type=\"text\" id=\"myInput$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\"></th>";
-                    } ?>
-                    <th><!--aanpasknop--></th>
-                    <th><!-- verwijderknop --></th>
+                    <?php for ($i = 0; $i <= 6; $i++) {// 7 zoekveldjes maken met de functie TableHeaderWriter. LidFilters($i) voert de javascript functie "LidFilters" onderaan de pagina uit.
+                        echo TableHeaderWriter(array("<input type=\"text\" id=\"Invoer$i\" onkeyup=\"LidFilters($i)\" placeholder=\"Zoeken...\">"));
+                    }
+                    echo TableHeaderWriter(array("",""));?>
                 </tr>
                 </thead>
                 <tbody>
@@ -310,9 +280,7 @@ foreach ($Leden as $Lid) :
                                 <table id="leden" class="table table-striped table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Boek nummer</th>
-                                        <th>Titel</th>
-                                        <th>ISBN</th>
+                                        <?php echo TableHeaderWriter(array("Boek Nummer","Titel","ISBN"));?>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -358,7 +326,7 @@ endforeach
         function LidFilters(col) {
             // Variabelen
             let input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput" + col);
+            input = document.getElementById("Invoer" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("leden");
             tr = table.getElementsByTagName("tr");

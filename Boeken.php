@@ -1,39 +1,39 @@
 <?php
-require "./functies/Boeken_Functies.php"; // Bevat functies specifiek voor deze pagina
-include "./templates/Header.php"; //CSS en HTML Header.
+require_once "./functies/Boeken_Functies.php"; // Bevat functies specifiek voor deze pagina
+include_once "./templates/Header.php"; //CSS en HTML Header.
 ?>
+<?PHP //SQL Queries
+$Boeken = $pdo->query("SELECT
+    boek.Titel,
+    boek.ISBN,
+    a.Voornaam,
+    a.Voorvoegsel,
+    a.Achternaam,
+    o.Naam,
+    GROUP_CONCAT(distinct o.Naam SEPARATOR ', ') AS Onderwerp,
+    count(distinct e.Boek_nr)  AS \"Aantal boeken\"
+    FROM boek
+         INNER JOIN exemplaar e on boek.ISBN = e.ISBN
+         INNER JOIN auteur a on boek.Auteur_nr = a.Auteur_nr
+         INNER JOIN bibliotheek b on e.Bibliotheek_nr = b.Bibliotheek_nr
+         INNER JOIN boek_onderwerp bo on boek.ISBN = bo.ISBN
+         INNER JOIN onderwerp o on bo.NUR_CODE = o.NUR_Code
+         LEFT JOIN lening l on e.Boek_nr = l.Boek_nr
+    GROUP BY boek.ISBN")->fetchAll();
 
+?>
 <div class="container-fluid">
     <div class="table-responsive">
         <table id="Boeken" class="table table-striped table-hover">
             <thead>
             <tr>
-                <?php for ($i = 0; $i <= 4; $i++) {
-                    switch ($i) {
-                        case 0:
-                            $Placeholder = "Titel";
-                            break;
-                        case 1:
-                            $Placeholder = "ISBN";
-                            break;
-                        case 2:
-                            $Placeholder = "Auteur";
-                            break;
-                        case 3:
-                            $Placeholder = "Onderwerp";
-                            break;
-                        case 4:
-                            $Placeholder = "Aantal Boeken";
-                            break;
-                    }
-                    echo "<th>$Placeholder</th>";
-                }
-                ?>
-                <th><?php //Exemplaarknop ?></th>
+                <?php echo TableHeaderWriter(array("Titel","ISBN","Auteur","Onderwerp","Aantal Boeken",""));?>
+
             </tr>
             <tr>
+                <?php ?>
                 <?php for ($i = 0; $i <= 4; $i++) {
-                    echo "<th><input type=\"text\" id=\"Input$i\" onkeyup=\"BoekFilters($i)\" placeholder=\"Zoeken...\"></th>";
+                    echo TableHeaderWriter(array("<input type=\"text\" id=\"Invoer$i\" onkeyup=\"BoekFilters($i)\" placeholder=\"Zoeken...\">"));
                 }
                 ?>
                 <th><?php //Exemplaarknop ?></th>
@@ -41,7 +41,7 @@ include "./templates/Header.php"; //CSS en HTML Header.
             </thead>
             <tbody>
             <?php
-            foreach ($Boeken as $Boek) :// Loop door elk resultaat uit de array $Leden. Zet de lidgegevens in een tabel.
+            foreach ($Boeken as $Boek) :// Loop door elk resultaat uit de array $Boeken. Zet de lidgegevens in een tabel.
                 ?>
                 <tr>
                     <td><?php echo $Boek["Titel"] ?></td>
@@ -55,7 +55,7 @@ include "./templates/Header.php"; //CSS en HTML Header.
                         ?></td>
                     <td><?php echo $Boek["Onderwerp"] ?></td>
                     <td><?php echo $Boek["Aantal boeken"] ?></td>
-                    <td><a href="#Exemplaren<?php echo $Boek["ISBN"]; ?>" class="btn btn-primary" data-toggle="modal" data-target="#Exemplaren<?php echo $Boek["ISBN"]; ?>">Exemplaren</a></td>
+                    <td><a href="#Exemplaren<?php echo $Boek["ISBN"]; ?>" class="btn btn-primary" data-toggle="modal" style="display: block" data-target="#Exemplaren<?php echo $Boek["ISBN"]; ?>">Exemplaren</a></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -65,25 +65,19 @@ include "./templates/Header.php"; //CSS en HTML Header.
 
 <?php foreach ($Boeken as $Boek) : ?>
 <div id="Exemplaren<?php echo $Boek['ISBN']; ?>" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-1100px">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Exemplaren van boek <?php echo $Boek["Titel"]; ?></h2>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <div class="modal-body-lg">
+            <div class="modal-body">
                 <div class="table-responsive">
                     <table id="leden" class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Boek nummer</th>
-                            <th>Aanschafdatum</th>
-                            <th>Aanschafprijs</th>
-                            <th>Boetetarief</th>
-                            <th>Uitleengrondslag</th>
-                            <th>Bibliotheek</th>
-                            <th>Uitgeverij</th>
-                            <th></th>
+                            <?php echo TableHeaderWriter(array("Boeknummer","Aanschafdatum","Aanschafprijs","Boetetarief","Uitleengrondslag","Bibliotheek","Uitgeverij","Uitgeleend",""));?>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -97,7 +91,8 @@ include "./templates/Header.php"; //CSS en HTML Header.
                                 <td><?php echo $Exemplaar['Uitleengrondslag'] ?></td>
                                 <td><?php echo $Exemplaar['Bibliotheek'] ?></td>
                                 <td><?php echo $Exemplaar['Uitgeverij'] ?></td>
-                                <td><a href="Uitlenen.php?Boek_nr=<?php echo $Exemplaar['Boek_nr']?>" class="btn btn-primary">Uitlenen</a></td>
+                                <td><?php if ($Exemplaar['uitgeleend'] == 1) {echo "ja";} else {echo "nee";}?></td>
+                                <td><a href="Uitlenen.php?Boek_nr=<?php echo $Exemplaar['Boek_nr']?>" class="btn btn-primary" style="display: block">Uitlenen</a></td>
                             </tr>
                         <?php endforeach ?>
                         </tbody>
@@ -117,7 +112,7 @@ include "./templates/Header.php"; //CSS en HTML Header.
         function BoekFilters(col) { // Voegt filterfunctionaliteit toe aan de tabel Boeken.
             // Variabelen
             let input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("Input" + col);
+            input = document.getElementById("Invoer" + col);
             filter = input.value.toUpperCase();
             table = document.getElementById("Boeken");
             tr = table.getElementsByTagName("tr");

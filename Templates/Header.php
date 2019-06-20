@@ -81,7 +81,9 @@
         .modal .modal-lg {
             max-width: 900px;
         }
-
+        .modal .modal-1100px {
+            max-width: 1100px;
+        }
         .modal .modal-header, .modal .modal-body, .modal .modal-footer {
             padding: 10px 30px;
         }
