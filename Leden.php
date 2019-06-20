@@ -5,7 +5,7 @@ require_once "./functies/Leden_Functies.php" // Bevat functies specifiek voor de
 ?>
 
 
-<?php //SQL  Prepared Statements
+<?php //SQL Prepared Statements
 
 //Lid aanpassen in de database.
 $LidAanpassenQuery = $pdo->prepare("Update Lid SET 
@@ -64,6 +64,7 @@ if (isset($_POST['Toevoegen'])) {// Voegt een lid toe met de gegevens uit $_POST
         ":Emailadres" => $_POST["Emailadres"],
         ":Geboortedatum" => $_POST["Geboortedatum"]
     ));
+    echo "";
 }
 
 if (isset($_POST['Aanpassen'])) {// Als $_POST['Aanpassen'] ingevuld is wordt het lid $_POST['Lid_nr'] aanpast met de variabelen uit de array $_POST
@@ -97,7 +98,6 @@ $lening = $pdo->query(
     "SELECT Lid_nr, Boetetarief,Uitleengrondslag,Uitleentijdstip FROM exemplaar 
 			INNER JOIN Lening ON exemplaar.Boek_nr = lening.Boek_nr
 			WHERE lening.Inleverdatum IS NULL")->fetchAll();
-
 ?>
     <div class="container-fluid">
         <div class="table">
@@ -132,7 +132,7 @@ $lening = $pdo->query(
                         <td><?php echo $Lid["Telefoonnummer"] ?></td>
                         <td><?php echo $Lid["Emailadres"] ?></td>
                         <td><?php echo $Lid["Geboortedatum"] ?></td>
-                        <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); ?></td>
+                        <td><?php echo "&euro;" . GetOpenstaandeBoeteBedragenVanLid($lening, $Lid["Lid_nr"]); //Berekent en vult de boetebedragen in ?></td>
                         <!-- Aanpasknop, verwijst naar div id Aanpassenlid$Lid["Lid_nr"] -->
                         <td><a href="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>" class="btn btn-primary" style="display: block" data-toggle="modal" data-target="#Aanpassenlid<?php echo $Lid["Lid_nr"]; ?>">Aanpassen</a></td>
                         <!-- Verwijderknop, verwijst naar div id Verwijderenlid$Lid["Lid_nr"] -->
@@ -166,7 +166,7 @@ $keys = GetTableKeys("Lid", $pdo); // Zet de kolomnamen (keys) van de tabel "Lid
                             <div class="form-group">
                                 <?php if ($key == 'Lid_nr') {// Lid nummer is een Auto-Increment waarde in de database en wordt dus niet meegenomen of invulbaar gemaakt.
                                 } elseif ($key == "Geboortedatum") {
-                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\"></label>";//label en invoerveld.
+                                    echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\"></label>";//label en invoerveld. ↓ = etc...
                                 } elseif ($key == "Voorletter") {
                                     echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" maxlength=\"1\"></label>";
                                 } elseif ($key == "Huisnummer") {
@@ -216,7 +216,7 @@ foreach ($Leden as $Lid) :
                             ?>
                             <div class="form-group">
                                 <?php if ($key == 'Lid_nr') {//Lid_nr wordt een readonly field zodat deze niet aanpasbaar is maar wel meegenomen wordt in $_POST.
-                                    Echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></label>"; //label en invoerveld.
+                                    Echo "<label>$key<br><input type=\"text\" class=\"form-control\" name=\"$key\" value=\"$value\" readonly></label>"; //label en invoerveld. ↓ = etc...
                                 } elseif ($key == "Geboortedatum") {
                                     echo "<label>$key<br><input type=\"date\" class=\"form-control\" name=\"$key\" value=\"$value\"></label>";
                                 } elseif ($key == "Voorletter") {
@@ -321,7 +321,7 @@ foreach ($Leden as $Lid) :
 endforeach
 ?>
     <script>
-        function LidFilters(col) {
+        function LidFilters(col) { // Voegt filter-functionaliteit toe aan de tabel leden
             // Variabelen
             let input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("Invoer" + col);

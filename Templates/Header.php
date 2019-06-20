@@ -15,6 +15,14 @@
             background-color: rgba(67, 93, 125, 0.25);
             font-family: 'Varela Round', sans-serif;
         }
+        h1.BigMessage {
+            Background-color: #374e6e;
+            border: solid black 1px;
+            color: white;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
         .btn {
             font-size: 12px;
         }
@@ -26,10 +34,19 @@
 
         .card {
             height: 400px;
-            margin: 0 auto;
-            margin-bottom: 10px;
-            float: none;
+            margin: auto;
+            overflow: auto;
+            top: 0; left: 0; bottom: 0; right: 0;
+            position: absolute;
             width: 400px;
+        }
+        .card.warn {
+            color: yellow;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .card.info {
+            color: #00cd00;
+            background: rgba(0, 0, 0, 0.4);
         }
         .table {
             max-height: 100%;
@@ -43,15 +60,14 @@
             border-color: black;
             border-width: 1px;
             padding: 5px 5px;
-            vertical-align: Middle;
             text-align: center;
             border-right-style: solid;
             border-bottom-style: solid;
             border-left-style: solid;
 
         }
+
         table.table tr td {
-            border-color: #e9e9e9;
             font-size: 12px;
             padding: 5px 5px;
             height: 45px;

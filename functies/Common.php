@@ -5,16 +5,18 @@ define("username", "root");
 define("password", "");
 define("dbname", "debieb");
 
-
+//Verbindingsregel PDO
 $dsn = "mysql:host=" . host . ";dbname=" . dbname . ";charset=utf8mb4";
+
+//Opties instellen voor de verbinding
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
-try {
+try { // Poging tot verbinden
     $pdo = new PDO($dsn, username, password, $options);
-} catch (PDOException $e) {
+} catch (PDOException $e) { // Verbinding niet gelukt? :(
     throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
 
@@ -24,7 +26,7 @@ function TableHeaderWriter(array $HeaderNames)
     for ($i = 0; $i < count($HeaderNames); $i++) {
         array_push($return, "<th>$HeaderNames[$i]</th>");
     }
-    return implode("\n", $return);
+    return implode("\n", $return); //imploderen zodat strings worden teruggegeven i.p.v. een array. \n staat voor een nieuwe regen
 }
 
 function sqlquery($query)

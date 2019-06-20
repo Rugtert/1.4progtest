@@ -1,6 +1,7 @@
 <?php
 require_once "./functies/Common.php";
-# onderstaande functie is toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
+// onderstaande functie is toegevoegd om aan de toetseisen te voldoen. Ze worden niet in het programma gebruikt maar worden wel door een unittest geslingerd.
+// De functie berekent hoeveel uur het kost om de maan te bereiken met een bepaalde snelheid.
 Function HoeLangDuurtHetOmDeMaanTeBereiken($Snelheid = NULL)
 {
     //Afstanden
